@@ -92,187 +92,181 @@
               <ul class="navbar-nav flex-column mb-3" id="navbarVerticalNav">
                 
                <!-- Образовательное навигационное меню -->
-<li class="nav-item">
-  <!-- Заголовок раздела -->
-  <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
-    <div class="col-auto navbar-vertical-label">Образовательная платформа</div>
-    <div class="col ps-0">
-      <hr class="mb-0 navbar-vertical-divider" />
-    </div>
-  </div>
-  
-  <!-- Основной дашборд -->
-  <a class="nav-link" href="static/app/education/dashboard.html" role="button">
-    <div class="d-flex align-items-center">
-      <span class="nav-link-icon"><span class="fas fa-tachometer-alt"></span></span>
-      <span class="nav-link-text ps-1">Дашборд</span>
-    </div>
-  </a>
-  
-  <!-- Курсы -->
-  <a class="nav-link dropdown-indicator" href="#courses" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="courses">
-    <div class="d-flex align-items-center">
-      <span class="nav-link-icon"><span class="fas fa-book"></span></span>
-      <span class="nav-link-text ps-1">Курсы</span>
-    </div>
-  </a>
-  <ul class="nav collapse" id="courses">
-    <li class="nav-item">
-      <a class="nav-link" href="static/app/education/courses/course-list.html">
-        <div class="d-flex align-items-center">
-          <span class="nav-link-text ps-1">Список курсов</span>
-        </div>
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="static/app/education/courses/course-grid.html">
-        <div class="d-flex align-items-center">
-          <span class="nav-link-text ps-1">Сетка курсов</span>
-        </div>
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="static/app/education/courses/course-details.html">
-        <div class="d-flex align-items-center">
-          <span class="nav-link-text ps-1">Детали курса</span>
-        </div>
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{{ url_for('create_course') }}">
-        <div class="d-flex align-items-center">
-          <span class="nav-link-text ps-1">Создать курс</span>
-        </div>
-      </a>
-    </li>
-  </ul>
-  
-  <!-- Студенты -->
-  <a class="nav-link dropdown-indicator" href="#students" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="students">
-    <div class="d-flex align-items-center">
-      <span class="nav-link-icon"><span class="fas fa-user-graduate"></span></span>
-      <span class="nav-link-text ps-1">Студенты</span>
-    </div>
-  </a>
-  <ul class="nav collapse" id="students">
-    <li class="nav-item">
-      <a class="nav-link" href="static/app/education/students/student-list.html">
-        <div class="d-flex align-items-center">
-          <span class="nav-link-text ps-1">Список студентов</span>
-        </div>
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="static/app/education/students/student-details.html">
-        <div class="d-flex align-items-center">
-          <span class="nav-link-text ps-1">Детали студента</span>
-        </div>
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="static/app/education/students/registration.html">
-        <div class="d-flex align-items-center">
-          <span class="nav-link-text ps-1">Регистрация</span>
-        </div>
-      </a>
-    </li>
-  </ul>
-  
-  <!-- Преподаватели -->
-  <a class="nav-link dropdown-indicator" href="#trainers" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="trainers">
-    <div class="d-flex align-items-center">
-      <span class="nav-link-icon"><span class="fas fa-chalkboard-teacher"></span></span>
-      <span class="nav-link-text ps-1">Преподаватели</span>
-    </div>
-  </a>
-  <ul class="nav collapse" id="trainers">
-    <li class="nav-item">
-      <a class="nav-link" href="static/app/education/trainers/trainer-list.html">
-        <div class="d-flex align-items-center">
-          <span class="nav-link-text ps-1">Список преподавателей</span>
-        </div>
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="static/app/education/trainers/trainer-profile.html">
-        <div class="d-flex align-items-center">
-          <span class="nav-link-text ps-1">Профиль преподавателя</span>
-        </div>
-      </a>
-    </li>
-  </ul>
-  
-  <!-- Календарь событий -->
-  <a class="nav-link" href="static/app/education/calendar.html" role="button">
-    <div class="d-flex align-items-center">
-      <span class="nav-link-icon"><span class="fas fa-calendar-alt"></span></span>
-      <span class="nav-link-text ps-1">Календарь</span>
-    </div>
-  </a>
-  
-  <!-- Чат и уведомления -->
-  <a class="nav-link" href="static/app/education/chat.html" role="button">
-    <div class="d-flex align-items-center">
-      <span class="nav-link-icon"><span class="fas fa-comments"></span></span>
-      <span class="nav-link-text ps-1">Чат</span>
-    </div>
-  </a>
-  
-  <!-- Электронная почта -->
-  <a class="nav-link dropdown-indicator" href="#email" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="email">
-    <div class="d-flex align-items-center">
-      <span class="nav-link-icon"><span class="fas fa-envelope-open"></span></span>
-      <span class="nav-link-text ps-1">Email</span>
-    </div>
-  </a>
-  <ul class="nav collapse" id="email">
-    <li class="nav-item">
-      <a class="nav-link" href="static/app/education/email/inbox.html">
-        <div class="d-flex align-items-center">
-          <span class="nav-link-text ps-1">Входящие</span>
-        </div>
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="static/app/education/email/email-detail.html">
-        <div class="d-flex align-items-center">
-          <span class="nav-link-text ps-1">Детали письма</span>
-        </div>
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="static/app/education/email/compose.html">
-        <div class="d-flex align-items-center">
-          <span class="nav-link-text ps-1">Написать письмо</span>
-        </div>
-      </a>
-    </li>
-  </ul>
-  
-  <!-- Поддержка -->
-  <a class="nav-link dropdown-indicator" href="#support-desk" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="support-desk">
-    <div class="d-flex align-items-center">
-      <span class="nav-link-icon"><span class="fas fa-life-ring"></span></span>
-      <span class="nav-link-text ps-1">Поддержка</span>
-    </div>
-  </a>
-  <ul class="nav collapse" id="support-desk">
-    <li class="nav-item">
-      <a class="nav-link" href="static/app/education/support-desk/tickets.html">
-        <div class="d-flex align-items-center">
-          <span class="nav-link-text ps-1">Тикеты</span>
-        </div>
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="static/app/education/support-desk/faq.html">
-        <div class="d-flex align-items-center">
-          <span class="nav-link-text ps-1">FAQ</span>
-        </div>
-      </a>
-    </li>
-  </ul>
-</li>
+               <li class="nav-item">
+                <!-- Заголовок раздела -->
+                <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
+                  <div class="col-auto navbar-vertical-label">Образовательная платформа</div>
+                  <div class="col ps-0">
+                    <hr class="mb-0 navbar-vertical-divider" />
+                  </div>
+                </div>
+                
+                <!-- Основной дашборд -->
+                <a class="nav-link" href="static/app/education/dashboard.html" role="button">
+                  <div class="d-flex align-items-center">
+                    <span class="nav-link-icon"><span class="fas fa-tachometer-alt"></span></span>
+                    <span class="nav-link-text ps-1">Дашборд</span>
+                  </div>
+                </a>
+                
+                <!-- Курсы -->
+                <a class="nav-link dropdown-indicator" href="#courses" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="courses">
+                  <div class="d-flex align-items-center">
+                    <span class="nav-link-icon"><span class="fas fa-book"></span></span>
+                    <span class="nav-link-text ps-1">Курсы</span>
+                  </div>
+                </a>
+                <ul class="nav collapse" id="courses">
+                  <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('course_list') }}">
+                      <div class="d-flex align-items-center">
+                        <span class="nav-link-text ps-1">Список курсов</span>
+                      </div>
+                    </a>
+                  </li>
+                  
+                  <li class="nav-item">
+                    <a class="nav-link" href="static/app/education/courses/course-details.html">
+                      <div class="d-flex align-items-center">
+                        <span class="nav-link-text ps-1">Детали курса</span>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('create_course') }}">
+                      <div class="d-flex align-items-center">
+                        <span class="nav-link-text ps-1">Создать курс</span>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+                
+                <!-- Студенты -->
+                <a class="nav-link dropdown-indicator" href="#students" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="students">
+                  <div class="d-flex align-items-center">
+                    <span class="nav-link-icon"><span class="fas fa-user-graduate"></span></span>
+                    <span class="nav-link-text ps-1">Студенты</span>
+                  </div>
+                </a>
+                <ul class="nav collapse" id="students">
+                  <li class="nav-item">
+                    <a class="nav-link" href="static/app/education/students/student-list.html">
+                      <div class="d-flex align-items-center">
+                        <span class="nav-link-text ps-1">Список студентов</span>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="static/app/education/students/student-details.html">
+                      <div class="d-flex align-items-center">
+                        <span class="nav-link-text ps-1">Детали студента</span>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="static/app/education/students/registration.html">
+                      <div class="d-flex align-items-center">
+                        <span class="nav-link-text ps-1">Регистрация</span>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+                
+                <!-- Преподаватели -->
+                <a class="nav-link dropdown-indicator" href="#trainers" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="trainers">
+                  <div class="d-flex align-items-center">
+                    <span class="nav-link-icon"><span class="fas fa-chalkboard-teacher"></span></span>
+                    <span class="nav-link-text ps-1">Преподаватели</span>
+                  </div>
+                </a>
+                <ul class="nav collapse" id="trainers">
+                  <li class="nav-item">
+                    <a class="nav-link" href="static/app/education/trainers/trainer-list.html">
+                      <div class="d-flex align-items-center">
+                        <span class="nav-link-text ps-1">Список преподавателей</span>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="static/app/education/trainers/trainer-profile.html">
+                      <div class="d-flex align-items-center">
+                        <span class="nav-link-text ps-1">Профиль преподавателя</span>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+                
+                <!-- Календарь событий -->
+                <a class="nav-link" href="static/app/education/calendar.html" role="button">
+                  <div class="d-flex align-items-center">
+                    <span class="nav-link-icon"><span class="fas fa-calendar-alt"></span></span>
+                    <span class="nav-link-text ps-1">Календарь</span>
+                  </div>
+                </a>
+                
+                <!-- Чат и уведомления -->
+                <a class="nav-link" href="static/app/education/chat.html" role="button">
+                  <div class="d-flex align-items-center">
+                    <span class="nav-link-icon"><span class="fas fa-comments"></span></span>
+                    <span class="nav-link-text ps-1">Чат</span>
+                  </div>
+                </a>
+                
+                <!-- Электронная почта -->
+                <a class="nav-link dropdown-indicator" href="#email" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="email">
+                  <div class="d-flex align-items-center">
+                    <span class="nav-link-icon"><span class="fas fa-envelope-open"></span></span>
+                    <span class="nav-link-text ps-1">Email</span>
+                  </div>
+                </a>
+                <ul class="nav collapse" id="email">
+                  <li class="nav-item">
+                    <a class="nav-link" href="static/app/education/email/inbox.html">
+                      <div class="d-flex align-items-center">
+                        <span class="nav-link-text ps-1">Входящие</span>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="static/app/education/email/email-detail.html">
+                      <div class="d-flex align-items-center">
+                        <span class="nav-link-text ps-1">Детали письма</span>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="static/app/education/email/compose.html">
+                      <div class="d-flex align-items-center">
+                        <span class="nav-link-text ps-1">Написать письмо</span>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+                
+                <!-- Поддержка -->
+                <a class="nav-link dropdown-indicator" href="#support-desk" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="support-desk">
+                  <div class="d-flex align-items-center">
+                    <span class="nav-link-icon"><span class="fas fa-life-ring"></span></span>
+                    <span class="nav-link-text ps-1">Поддержка</span>
+                  </div>
+                </a>
+                <ul class="nav collapse" id="support-desk">
+                  <li class="nav-item">
+                    <a class="nav-link" href="static/app/education/support-desk/tickets.html">
+                      <div class="d-flex align-items-center">
+                        <span class="nav-link-text ps-1">Тикеты</span>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="static/app/education/support-desk/faq.html">
+                      <div class="d-flex align-items-center">
+                        <span class="nav-link-text ps-1">FAQ</span>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </li>
                
               </ul>
               

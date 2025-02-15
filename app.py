@@ -10,5 +10,9 @@ def index():
 def create_course():
     return render_template('create-a-course.html')
 
+@app.route('/course_list')
+def course_list():
+    return render_template('course-list.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
