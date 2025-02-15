@@ -139,7 +139,7 @@
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="static/app/education/courses/create-course.html">
+      <a class="nav-link" href="{{ url_for('create_course') }}">
         <div class="d-flex align-items-center">
           <span class="nav-link-text ps-1">Создать курс</span>
         </div>
@@ -636,8 +636,8 @@
                 <h5 class="mb-0">Панкратов Александр</h5>
               </div>
               <div>
-                <button class="btn btn-primary btn-md me-2" type="button"><span class="fas fa-envelope me-md-1"> </span><span class="d-none d-md-inline">Message</span></button>
-                <button class="btn btn-falcon-default btn-md" type="button"><span class="fas fa-users me-md-1"></span><span class="d-none d-md-inline">Followers</span></button>
+                <button class="btn btn-primary btn-md me-2" type="button"><span class="fas fa-envelope me-md-1"></span><span class="d-none d-md-inline">Сообщения</span></button>
+                <button class="btn btn-falcon-default btn-md" type="button"><span class="fas fa-users me-md-1"></span><span class="d-none d-md-inline">Друзья</span></button>
               </div>
             </div>
           </div>
@@ -649,7 +649,7 @@
                 <div class="col-12">
                   <div class="card font-sans-serif">
                     <div class="card-body d-flex gap-3 flex-column flex-sm-row align-items-center">
-                      <img class="rounded-3" src="static/assets/img/elearning/avatar/student.png" alt="Аватар студента" width="112" />
+                      <img class="rounded-3" src="static/assets/img/elearning/avatar/student1.jpg" alt="Аватар студента" width="112" />
                       <table class="table table-borderless fs-10 fw-medium mb-0">
                         <tbody>
                           <tr>
@@ -696,33 +696,34 @@
                     </div>
                   </div>
                 </div>
-                <!-- Карточка расходов -->
-                <div class="col-md-6">
-                  <div class="card font-sans-serif">
-                    <div class="card-header pb-0">
-                      <h6 class="mb-0">Расходы</h6>
-                    </div>
-                    <div class="card-body">
-                      <div class="row g-0">
-                        <div class="col-6">
-                          <h4 class="text-700 lh-1 mb-1">$1971.52</h4>
-                          <span class="badge rounded-pill badge-subtle-danger fs-11 align-bottom">
-                            <span class="fas fa-caret-down me-1" data-fa-transform="shrink-4"></span>
-                            <span>5.1% за прошлый месяц</span>
-                          </span>
-                        </div>
-                        <div class="col-6 mt-n4 d-flex justify-content-end">
-                          <!-- Здесь будет график расходов -->
-                          <div class="echart-default" data-echart-responsive="true" data-echarts='{
-                            "xAxis": {"data": ["День 1", "День 2", "День 3", "День 4", "День 5", "День 6", "День 7", "День 8", "День 9", "День 10"]},
-                            "series": [{"type": "line", "data": [85,60,120,70,100,15,65,80,60,75,45], "smooth": true, "lineStyle": {"width":2}}],
-                            "grid": {"bottom": "2%", "top": "2%", "right": "0px", "left": "0px"}
-                          }'></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <!-- Карточка успеваемости -->
+<!-- Карточка успеваемости -->
+<div class="col-md-6">
+  <div class="card font-sans-serif">
+    <div class="card-header pb-0">
+      <h6 class="mb-0">Успеваемость</h6>
+    </div>
+    <div class="card-body">
+      <div class="row g-0">
+        <div class="col-6">
+          <h4 class="text-700 lh-1 mb-1">4.9 / 5.0</h4>
+          <span class="badge rounded-pill badge-subtle-success fs-11 align-bottom">
+            <span class="fas fa-caret-up me-1" data-fa-transform="shrink-4"></span>
+            <span>+0.4 за прошлый месяц</span>
+          </span>
+        </div>
+        <div class="col-6 mt-n4 d-flex justify-content-end">
+          <!-- График успеваемости с явным трендом -->
+          <div class="echart-default" data-echart-responsive="true" data-echarts='{
+            "xAxis": {"data": ["Неделя 1", "Неделя 2", "Неделя 3", "Неделя 4"]},
+            "series": [{"type": "line", "data": [4.2, 4.5, 4.7, 4.9], "smooth": true, "lineStyle": {"width":2}}], 
+            "grid": {"bottom": "2%", "top": "2%", "right": "0px", "left": "0px"}
+          }'></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
                 <!-- Карточка времени на сайте -->
                 <div class="col-md-6">
                   <div class="card font-sans-serif">
@@ -758,7 +759,10 @@
               <div class="card h-100 font-sans-serif">
                 <div class="card-header bg-body-tertiary d-flex flex-between-center py-2">
                   <h6 class="mb-0">Оценки за задания</h6>
-                  <a class="btn btn-link btn-sm px-0 fw-medium" href="#!">Индивидуальные результаты<span class="fas fa-angle-right ms-1 fs-10"></span></a>
+                  <a class="btn btn-link btn-sm px-0 fw-medium" href="#!">
+                    Индивидуальные результаты
+                    <span class="fas fa-angle-right ms-1 fs-10"></span>
+                  </a>
                 </div>
                 <div class="card-body">
                   <div class="row g-0 h-100">
@@ -770,7 +774,7 @@
                             <div class="vr rounded ps-1 bg-success"></div>
                             <h6 class="lh-base text-700 mb-0">90-100%</h6>
                           </div>
-                          <h5 class="fw-normal">10 курсов</h5>
+                          <h5 class="fw-normal">10 уроков</h5>
                           <h6 class="mb-0">
                             <span class="text-500 me-2">на этой неделе</span>
                             <span class="badge rounded-pill badge-subtle-success">
@@ -785,7 +789,7 @@
                             <div class="vr rounded ps-1 bg-primary"></div>
                             <h6 class="lh-base text-700 mb-0">70-90%</h6>
                           </div>
-                          <h5 class="fw-normal">16 курсов</h5>
+                          <h5 class="fw-normal">16 уроков</h5>
                           <h6 class="mb-0">
                             <span class="text-500 me-2">на этой неделе</span>
                             <span class="badge rounded-pill badge-subtle-danger">
@@ -800,7 +804,7 @@
                             <div class="vr rounded ps-1 bg-info"></div>
                             <h6 class="lh-base text-700 mb-0">40-70%</h6>
                           </div>
-                          <h5 class="fw-normal">12 курсов</h5>
+                          <h5 class="fw-normal">12 уроков</h5>
                           <h6 class="mb-0">
                             <span class="text-500 me-2">на этой неделе</span>
                             <span class="badge rounded-pill badge-subtle-secondary">
@@ -814,7 +818,7 @@
                             <div class="vr rounded ps-1 bg-warning"></div>
                             <h6 class="lh-base text-700 mb-0">0-40%</h6>
                           </div>
-                          <h5 class="fw-normal">2 курса</h5>
+                          <h5 class="fw-normal">2 урока</h5>
                           <h6 class="mb-0">
                             <span class="text-500 me-2">на этой неделе</span>
                             <span class="badge rounded-pill badge-subtle-primary">
@@ -1019,7 +1023,7 @@
                     <!-- Карточка для предмета "Математика" -->
                     <div class="col-6 col-md-4">
                       <div class="card h-100">
-                        <img src="static/app/education/course/math.jpg" class="card-img-top" alt="Математика">
+                        <img src="static/app/education/math.png" class="card-img-top" alt="Математика">
                         <div class="card-body p-2">
                           <h6 class="card-title mb-0 fs-11">Математика</h6>
                           <p class="card-text fs-10 text-muted">
@@ -1031,9 +1035,9 @@
                     <!-- Карточка для предмета "Физика" -->
                     <div class="col-6 col-md-4">
                       <div class="card h-100">
-                        <img src="static/app/education/course/physics.jpg" class="card-img-top" alt="Физика">
+                        <img src="static/app/education/eng.png" class="card-img-top" alt="Физика">
                         <div class="card-body p-2">
-                          <h6 class="card-title mb-0 fs-11">Физика</h6>
+                          <h6 class="card-title mb-0 fs-11">Английский язык</h6>
                           <p class="card-text fs-10 text-muted">
                             Брошено <span class="badge rounded-pill badge-subtle-primary">+3.5%</span>
                           </p>
@@ -1043,9 +1047,9 @@
                     <!-- Карточка для предмета "История" -->
                     <div class="col-6 col-md-4">
                       <div class="card h-100">
-                        <img src="static/app/education/course/history.jpg" class="card-img-top" alt="История">
+                        <img src="static/app/education/o.png" class="card-img-top" alt="История">
                         <div class="card-body p-2">
-                          <h6 class="card-title mb-0 fs-11">История</h6>
+                          <h6 class="card-title mb-0 fs-11">Испанский Язык</h6>
                           <p class="card-text fs-10 text-muted">
                             Текущий <span class="badge rounded-pill badge-subtle-danger">-5.1%</span>
                           </p>
@@ -1139,7 +1143,7 @@
                     <tr class="btn-reveal-trigger fw-semi-bold">
                       <td class="align-middle white-space-nowrap title" style="max-width: 23rem;">
                         <div class="d-flex gap-3 align-items-center position-relative">
-                          <img class="rounded-1 border border-200" src="static/assets/img/elearning/courses/school-math.jpg" width="60" alt="Математика для школьников">
+                          <img class="rounded-1 border border-200" src="static/assets/img/elearning/courses/course1.png" width="60" alt="Математика для школьников">
                           <a class="stretched-link text-truncate" href="static/app/e-learning/course/course-details.html">
                             Математика для школьников: основы арифметики
                           </a>
@@ -1174,7 +1178,7 @@
                     <tr class="btn-reveal-trigger fw-semi-bold">
                       <td class="align-middle white-space-nowrap title" style="max-width: 23rem;">
                         <div class="d-flex gap-3 align-items-center position-relative">
-                          <img class="rounded-1 border border-200" src="static/assets/img/elearning/courses/school-russian.jpg" width="60" alt="Русский язык для школьников">
+                          <img class="rounded-1 border border-200" src="static/assets/img/elearning/courses/course2.png" width="60" alt="Русский язык для школьников">
                           <a class="stretched-link text-truncate" href="static/app/e-learning/course/course-details.html">
                             Русский язык: чтение и письмо
                           </a>
@@ -1209,7 +1213,7 @@
                     <tr class="btn-reveal-trigger fw-semi-bold">
                       <td class="align-middle white-space-nowrap title" style="max-width: 23rem;">
                         <div class="d-flex gap-3 align-items-center position-relative">
-                          <img class="rounded-1 border border-200" src="static/assets/img/elearning/courses/school-history.jpg" width="60" alt="История для школьников">
+                          <img class="rounded-1 border border-200" src="static/assets/img/elearning/courses/course3.png" width="60" alt="История для школьников">
                           <a class="stretched-link text-truncate" href="static/app/e-learning/course/course-details.html">
                             История: древний мир и его наследие
                           </a>
@@ -1244,7 +1248,7 @@
                     <tr class="btn-reveal-trigger fw-semi-bold">
                       <td class="align-middle white-space-nowrap title" style="max-width: 23rem;">
                         <div class="d-flex gap-3 align-items-center position-relative">
-                          <img class="rounded-1 border border-200" src="static/assets/img/elearning/courses/school-biology.jpg" width="60" alt="Биология для школьников">
+                          <img class="rounded-1 border border-200" src="static/assets/img/elearning/courses/course4.png" width="60" alt="Биология для школьников">
                           <a class="stretched-link text-truncate" href="static/app/e-learning/course/course-details.html">
                             Биология для школьников: основы живой природы
                           </a>
@@ -1279,7 +1283,7 @@
                     <tr class="btn-reveal-trigger fw-semi-bold">
                       <td class="align-middle white-space-nowrap title" style="max-width: 23rem;">
                         <div class="d-flex gap-3 align-items-center position-relative">
-                          <img class="rounded-1 border border-200" src="static/assets/img/elearning/courses/school-geography.jpg" width="60" alt="География для школьников">
+                          <img class="rounded-1 border border-200" src="static/assets/img/elearning/courses/course5.png" width="60" alt="География для школьников">
                           <a class="stretched-link text-truncate" href="static/app/e-learning/course/course-details.html">
                             География: основы мира вокруг нас
                           </a>
@@ -1314,7 +1318,7 @@
                     <tr class="btn-reveal-trigger fw-semi-bold">
                       <td class="align-middle white-space-nowrap title" style="max-width: 23rem;">
                         <div class="d-flex gap-3 align-items-center position-relative">
-                          <img class="rounded-1 border border-200" src="static/assets/img/elearning/courses/school-literature.jpg" width="60" alt="Литература для школьников">
+                          <img class="rounded-1 border border-200" src="static/assets/img/elearning/courses/course6.png" width="60" alt="Литература для школьников">
                           <a class="stretched-link text-truncate" href="static/app/e-learning/course/course-details.html">
                             Литература: чтение и анализ произведений
                           </a>
