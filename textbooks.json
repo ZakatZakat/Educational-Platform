@@ -1,0 +1,67 @@
+[
+    {
+        "subject": "Математика 6 класс",
+        "image": "static/app/education/math.png",
+        "rating": [
+            1,
+            1,
+            1,
+            1,
+            0
+        ],
+        "progress": "Готово 3 из 5 упражнений",
+        "route": "/math_page"
+    },
+    {
+        "subject": "Грамматика Английского Языка",
+        "image": "static/app/education/gramm.png",
+        "rating": [
+            1,
+            1,
+            1,
+            0.5,
+            0
+        ],
+        "progress": "Готово 5 из 5 упражнений",
+        "route": "#"
+    },
+    {
+        "subject": "Физика 6 класс",
+        "image": "static/app/education/o.png",
+        "rating": [
+            1,
+            1,
+            1,
+            0,
+            0
+        ],
+        "progress": "Готово 2 из 5 упражнений",
+        "route": "#"
+    },
+    {
+        "subject": "Русский язык 6 класс",
+        "image": "static/app/education/russian.png",
+        "rating": [
+            1,
+            1,
+            1,
+            1,
+            0
+        ],
+        "progress": "Готово 3 из 5 упражнений",
+        "route": "#"
+    },
+    {
+        "subject": "Ionina_A_A",
+        "image": "static/app/education/preview_Ionina_A_A_Saakyan_A_S_Angliyskaya_grammatika_XXI_veka_Universalny.png",
+        "rating": [
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "progress": "Новый учебник",
+        "route": "#"
+    }
+]
