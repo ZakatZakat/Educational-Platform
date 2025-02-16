@@ -565,22 +565,22 @@ style="background-color: #F8F9FA; border-radius: 8px; width: 100%; max-width: 40
                   </li>
                   <li class="nav-item" role="presentation">
                     <button class="nav-link" id="physics-tab" data-bs-toggle="tab" data-bs-target="#physics" type="button" role="tab" aria-controls="physics" aria-selected="false">
-                      Физика
+                      Математика
                     </button>
                   </li>
                   <li class="nav-item" role="presentation">
                     <button class="nav-link" id="chemistry-tab" data-bs-toggle="tab" data-bs-target="#chemistry" type="button" role="tab" aria-controls="chemistry" aria-selected="false">
-                      Химия
+                      Английский Язык
                     </button>
                   </li>
                   <li class="nav-item" role="presentation">
                     <button class="nav-link" id="russian-tab" data-bs-toggle="tab" data-bs-target="#russian" type="button" role="tab" aria-controls="russian" aria-selected="false">
-                      Русский язык
+                      Русский Язык
                     </button>
                   </li>
                   <li class="nav-item" role="presentation">
                     <button class="nav-link" id="math-tab" data-bs-toggle="tab" data-bs-target="#math" type="button" role="tab" aria-controls="math" aria-selected="false">
-                      Математика
+                      Испанский Язык
                     </button>
                   </li>
                 </ul>
@@ -593,154 +593,75 @@ style="background-color: #F8F9FA; border-radius: 8px; width: 100%; max-width: 40
                   <!-- Вкладка "Все" (6 карточек) -->
                   <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
                     <div class="row g-3">
-                      
-                      <!-- Карточка: Математика 6 класс -->
-<div class="col-12 col-sm-6 col-md-4 col-lg-4">
-    <div class="card h-100 border-200 shadow-sm">
-      <img src="static/app/education/math.png" 
-           class="card-img-top" 
-           alt="Математика 6 класс"
-           style="height: 500px; object-fit: cover;" />
-      <div class="card-body p-3">
-        <h6 class="card-title fw-bold mb-1">Математика 6 класс</h6>
-        <p class="mb-1">
-          <i class="fas fa-star text-warning"></i>
-          <i class="fas fa-star text-warning"></i>
-          <i class="fas fa-star text-warning"></i>
-          <i class="fas fa-star text-warning"></i>
-          <i class="far fa-star text-warning"></i>
-        </p>
-        <p class="card-text text-muted fs-12 mb-2">
-          Готово 3 из 5 упражнений
-        </p>
-        <!-- Кнопка с ссылкой на маршрут 'math_page' -->
-        <a class="btn btn-primary btn-sm" href="{{ url_for('math_page') }}">
-          Начать
-        </a>
-      </div>
-    </div>
-  </div>
-          
-                      <!-- Карточка: Химия 6 класс -->
+                      {% for book in textbooks %}
                       <div class="col-12 col-sm-6 col-md-4 col-lg-4">
-                        <div class="card h-100 border-200 shadow-sm">
-                          <img src="static/app/education/chemistry.png" 
-                               class="card-img-top" 
-                               alt="Химия 6 класс"
-                               style="height: 500px; object-fit: cover;" />
-                          <div class="card-body p-3">
-                            <h6 class="card-title fw-bold mb-1">Химия 6 класс</h6>
-                            <p class="mb-1">
-                              <i class="fas fa-star text-warning"></i>
-                              <i class="fas fa-star text-warning"></i>
-                              <i class="fas fa-star text-warning"></i>
-                              <i class="fas fa-star-half-alt text-warning"></i>
-                              <i class="far fa-star text-warning"></i>
-                            </p>
-                            <p class="card-text text-muted fs-12 mb-2">
-                              Готово 5 из 5 упражнений
-                            </p>
-                            <button class="btn btn-primary btn-sm">Начать</button>
+                        <div class="p-3 h-100" 
+                             style="border: 2px solid #E1DDFE; border-radius: 12px;">
+                          <div class="d-flex align-items-center h-100">
+                            <!-- Обложка -->
+                            <div style="
+                              width: 100px; 
+                              height: 140px; 
+                              margin-right: 16px; 
+                              overflow: hidden; 
+                              border-radius: 8px;">
+                              <img src="{{ book.image }}"
+                                   alt="{{ book.subject }}"
+                                   style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+                            <!-- Основная информация -->
+                            <div class="flex-grow-1 d-flex flex-column justify-content-between">
+                              <div>
+                                <h6 class="fw-bold mb-1" style="font-size: 1rem;">{{ book.subject }}</h6>
+                                <p class="mb-1" style="font-size: 0.875rem;">
+                                  {% for star in book.rating %}
+                                    {% if star == 1 %}
+                                      <i class="fas fa-star text-warning"></i>
+                                    {% elif star == 0.5 %}
+                                      <i class="fas fa-star-half-alt text-warning"></i>
+                                    {% else %}
+                                      <i class="far fa-star text-warning"></i>
+                                    {% endif %}
+                                  {% endfor %}
+                                </p>
+                                <p class="text-muted mb-1" style="font-size: 0.875rem;">{{ book.progress }}</p>
+                                <div style="
+                                  background-color: #C8ABF7;
+                                  height: 4px;
+                                  width: 120px;
+                                  border-radius: 2px;
+                                  margin-bottom: 12px;">
+                                </div>
+                              </div>
+                              <div>
+                                {% if book.route %}
+                                  <a href="{{ book.route }}"
+                                     class="btn"
+                                     style="
+                                       background-color: #B084F6; 
+                                       color: #fff; 
+                                       border-radius: 8px; 
+                                       padding: 6px 16px; 
+                                       font-weight: 500;">
+                                    Начать
+                                  </a>
+                                {% else %}
+                                  <button class="btn"
+                                          style="
+                                            background-color: #B084F6; 
+                                            color: #fff; 
+                                            border-radius: 8px; 
+                                            padding: 6px 16px; 
+                                            font-weight: 500;">
+                                    Начать
+                                  </button>
+                                {% endif %}
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
-          
-                      <!-- Карточка: Физика 6 класс -->
-                      <div class="col-12 col-sm-6 col-md-4 col-lg-4">
-                        <div class="card h-100 border-200 shadow-sm">
-                          <img src="static/app/education/physics.png" 
-                               class="card-img-top" 
-                               alt="Физика 6 класс"
-                               style="height: 500px; object-fit: cover;" />
-                          <div class="card-body p-3">
-                            <h6 class="card-title fw-bold mb-1">Физика 6 класс</h6>
-                            <p class="mb-1">
-                              <i class="fas fa-star text-warning"></i>
-                              <i class="fas fa-star text-warning"></i>
-                              <i class="fas fa-star text-warning"></i>
-                              <i class="far fa-star text-warning"></i>
-                              <i class="far fa-star text-warning"></i>
-                            </p>
-                            <p class="card-text text-muted fs-12 mb-2">
-                              Готово 2 из 5 упражнений
-                            </p>
-                            <button class="btn btn-primary btn-sm">Начать</button>
-                          </div>
-                        </div>
-                      </div>
-          
-                      <!-- Карточка: Русский язык 6 класс -->
-                      <div class="col-12 col-sm-6 col-md-4 col-lg-4">
-                        <div class="card h-100 border-200 shadow-sm">
-                          <img src="static/app/education/russian.png" 
-                               class="card-img-top" 
-                               alt="Русский язык 6 класс"
-                               style="height: 500px; object-fit: cover;" />
-                          <div class="card-body p-3">
-                            <h6 class="card-title fw-bold mb-1">Русский язык 6 класс</h6>
-                            <p class="mb-1">
-                              <i class="fas fa-star text-warning"></i>
-                              <i class="fas fa-star text-warning"></i>
-                              <i class="fas fa-star text-warning"></i>
-                              <i class="fas fa-star text-warning"></i>
-                              <i class="far fa-star text-warning"></i>
-                            </p>
-                            <p class="card-text text-muted fs-12 mb-2">
-                              Готово 3 из 5 упражнений
-                            </p>
-                            <button class="btn btn-primary btn-sm">Начать</button>
-                          </div>
-                        </div>
-                      </div>
-          
-                      <!-- Карточка: Информатика 6 класс -->
-                      <div class="col-12 col-sm-6 col-md-4 col-lg-4">
-                        <div class="card h-100 border-200 shadow-sm">
-                          <img src="static/app/education/it.png" 
-                               class="card-img-top" 
-                               alt="Информатика 6 класс"
-                               style="height: 500px; object-fit: cover;" />
-                          <div class="card-body p-3">
-                            <h6 class="card-title fw-bold mb-1">Информатика 6 класс</h6>
-                            <p class="mb-1">
-                              <i class="fas fa-star text-warning"></i>
-                              <i class="fas fa-star text-warning"></i>
-                              <i class="fas fa-star text-warning"></i>
-                              <i class="far fa-star text-warning"></i>
-                              <i class="far fa-star text-warning"></i>
-                            </p>
-                            <p class="card-text text-muted fs-12 mb-2">
-                              Готово 4 из 5 упражнений
-                            </p>
-                            <button class="btn btn-primary btn-sm">Начать</button>
-                          </div>
-                        </div>
-                      </div>
-          
-                      <!-- Карточка: Литература 6 класс -->
-                      <div class="col-12 col-sm-6 col-md-4 col-lg-4">
-                        <div class="card h-100 border-200 shadow-sm">
-                          <img src="static/app/education/literature.png" 
-                               class="card-img-top" 
-                               alt="Литература 6 класс"
-                               style="height: 500px; object-fit: cover;" />
-                          <div class="card-body p-3">
-                            <h6 class="card-title fw-bold mb-1">Литература 6 класс</h6>
-                            <p class="mb-1">
-                              <i class="fas fa-star text-warning"></i>
-                              <i class="fas fa-star text-warning"></i>
-                              <i class="fas fa-star text-warning"></i>
-                              <i class="fas fa-star-half-alt text-warning"></i>
-                              <i class="far fa-star text-warning"></i>
-                            </p>
-                            <p class="card-text text-muted fs-12 mb-2">
-                              Готово 2 из 5 упражнений
-                            </p>
-                            <button class="btn btn-primary btn-sm">Начать</button>
-                          </div>
-                        </div>
-                      </div>
-          
+                      {% endfor %}
                     </div>
                   </div>
                   
@@ -748,27 +669,59 @@ style="background-color: #F8F9FA; border-radius: 8px; width: 100%; max-width: 40
                   <div class="tab-pane fade" id="physics" role="tabpanel" aria-labelledby="physics-tab">
                     <div class="row g-3">
                       <div class="col-12 col-sm-6 col-md-4 col-lg-4">
-                        <div class="card h-100 border-200 shadow-sm">
-                          <img src="static/app/education/physics.png" 
-                               class="card-img-top" 
-                               alt="Физика 6 класс"
-                               style="height: 500px; object-fit: cover;" />
-                          <div class="card-body p-3">
-                            <h6 class="card-title fw-bold mb-1">Физика 6 класс</h6>
-                            <p class="mb-1">
-                              <i class="fas fa-star text-warning"></i>
-                              <i class="fas fa-star text-warning"></i>
-                              <i class="fas fa-star text-warning"></i>
-                              <i class="far fa-star text-warning"></i>
-                              <i class="far fa-star text-warning"></i>
-                            </p>
-                            <p class="card-text text-muted fs-12 mb-2">
-                              Готово 2 из 5 упражнений
-                            </p>
-                            <button class="btn btn-primary btn-sm">Начать</button>
+                        <div class="p-3 h-100" 
+                             style="border: 2px solid #E1DDFE; border-radius: 12px;">
+                          <div class="d-flex align-items-center h-100">
+                            <!-- Обложка -->
+                            <div style="
+                              width: 100px; 
+                              height: 140px; 
+                              margin-right: 16px; 
+                              overflow: hidden; 
+                              border-radius: 8px;">
+                              <img src="static/app/education/math.png"
+                                   alt="Математика 6 класс"
+                                   style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+                            <!-- Основная информация -->
+                            <div class="flex-grow-1 d-flex flex-column justify-content-between">
+                              <div>
+                                <h6 class="fw-bold mb-1" style="font-size: 1rem;">Математика 6 класс</h6>
+                                <p class="mb-1" style="font-size: 0.875rem;">
+                                  <i class="fas fa-star text-warning"></i>
+                                  <i class="fas fa-star text-warning"></i>
+                                  <i class="fas fa-star text-warning"></i>
+                                  <i class="fas fa-star text-warning"></i>
+                                  <i class="far fa-star text-warning"></i>
+                                </p>
+                                <p class="text-muted mb-1" style="font-size: 0.875rem;">
+                                  Готово 3 из 5 упражнений
+                                </p>
+                                <!-- Полоса прогресса (пример) -->
+                                <div style="
+                                  background-color: #C8ABF7;
+                                  height: 4px;
+                                  width: 120px;
+                                  border-radius: 2px;
+                                  margin-bottom: 12px;">
+                                </div>
+                              </div>
+                              <!-- Кнопка "Начать" -->
+                              <div>
+                                <a href="{{ url_for('math_page') }}"
+                                   class="btn"
+                                   style="
+                                     background-color: #B084F6; 
+                                     color: #fff; 
+                                     border-radius: 8px; 
+                                     padding: 6px 16px; 
+                                     font-weight: 500;">
+                                  Начать
+                                </a>
+                              </div>
+                            </div>
                           </div>
                         </div>
-                      </div>
                     </div>
                   </div>
           
@@ -776,27 +729,54 @@ style="background-color: #F8F9FA; border-radius: 8px; width: 100%; max-width: 40
                   <div class="tab-pane fade" id="chemistry" role="tabpanel" aria-labelledby="chemistry-tab">
                     <div class="row g-3">
                       <div class="col-12 col-sm-6 col-md-4 col-lg-4">
-                        <div class="card h-100 border-200 shadow-sm">
-                          <img src="static/app/education/chemistry.png" 
-                               class="card-img-top" 
-                               alt="Химия 6 класс"
-                               style="height: 500px; object-fit: cover;" />
-                          <div class="card-body p-3">
-                            <h6 class="card-title fw-bold mb-1">Химия 6 класс</h6>
-                            <p class="mb-1">
-                              <i class="fas fa-star text-warning"></i>
-                              <i class="fas fa-star text-warning"></i>
-                              <i class="fas fa-star text-warning"></i>
-                              <i class="fas fa-star-half-alt text-warning"></i>
-                              <i class="far fa-star text-warning"></i>
-                            </p>
-                            <p class="card-text text-muted fs-12 mb-2">
-                              Готово 5 из 5 упражнений
-                            </p>
-                            <button class="btn btn-primary btn-sm">Начать</button>
+                        <div class="p-3 h-100" 
+                             style="border: 2px solid #E1DDFE; border-radius: 12px;">
+                          <div class="d-flex align-items-center h-100">
+                            <div style="
+                              width: 100px; 
+                              height: 140px; 
+                              margin-right: 16px; 
+                              overflow: hidden; 
+                              border-radius: 8px;">
+                              <img src="static/app/education/gramm.png"
+                                   alt="Грамматика Английского Языка"
+                                   style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+                            <div class="flex-grow-1 d-flex flex-column justify-content-between">
+                              <div>
+                                <h6 class="fw-bold mb-1" style="font-size: 1rem;">Грамматика Английского Языка</h6>
+                                <p class="mb-1" style="font-size: 0.875rem;">
+                                  <i class="fas fa-star text-warning"></i>
+                                  <i class="fas fa-star text-warning"></i>
+                                  <i class="fas fa-star text-warning"></i>
+                                  <i class="fas fa-star-half-alt text-warning"></i>
+                                  <i class="far fa-star text-warning"></i>
+                                </p>
+                                <p class="text-muted mb-1" style="font-size: 0.875rem;">
+                                  Готово 5 из 5 упражнений
+                                </p>
+                                <div style="
+                                  background-color: #C8ABF7;
+                                  height: 4px;
+                                  width: 120px;
+                                  border-radius: 2px;
+                                  margin-bottom: 12px;">
+                                </div>
+                              </div>
+                              <div>
+                                <button class="btn"
+                                        style="
+                                          background-color: #B084F6; 
+                                          color: #fff; 
+                                          border-radius: 8px; 
+                                          padding: 6px 16px; 
+                                          font-weight: 500;">
+                                  Начать
+                                </button>
+                              </div>
+                            </div>
                           </div>
                         </div>
-                      </div>
                     </div>
                   </div>
           
@@ -857,7 +837,10 @@ style="background-color: #F8F9FA; border-radius: 8px; width: 100%; max-width: 40
                   </div>
           
                 </div> <!-- /tab-content -->
-              </div> <!-- /card-body -->
+                  </div> <!-- /card-body -->
+
+
+
             </div> <!-- /card -->
           </div>
 
