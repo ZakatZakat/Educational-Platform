@@ -551,67 +551,153 @@ style="background-color: #F8F9FA; border-radius: 8px; width: 100%; max-width: 40
           </div>
 
         <!-- Статус курсов -->
-<div class="row g-3 mb-3">
-  <!-- Левая часть (основная, где PDF) -->
-  <div class="col-xxl-8 d-flex flex-column align-items-stretched">
-    <div class="card mb-3">
-      <!-- Заголовок и статус -->
-      <div class="card-header bg-white d-flex flex-wrap flex-between-center align-items-center" style="border-bottom: 0;">
-        <div>
-          <h5 class="mb-0">Упражнения из учебника</h5>
-          <small class="text-muted">Голицынский</small>
+        <div class="row g-3 mb-3">
+          <!-- Левая часть (основная, где отображаются PNG страницы учебника) -->
+          <div class="col-xxl-8 d-flex flex-column align-items-stretched">
+            <div class="card mb-3">
+              <!-- Заголовок и статус -->
+              <div class="card-header bg-white d-flex flex-wrap flex-between-center align-items-center" style="border-bottom: 0;">
+                <div>
+                  <h5 class="mb-0">Упражнения из учебника</h5>
+                  <small class="text-muted">Голицынский</small>
+                </div>
+                <span class="badge bg-primary">Готово 4 из 5 упражнений</span>
+              </div>
+              
+              <!-- Навигация по страницам (кнопки и селектор) -->
+              <div class="px-3 py-2 d-flex align-items-center">
+                <button id="prevPage" class="btn btn-outline-secondary btn-sm me-2">← Назад</button>
+                <select id="pageSelector" class="form-select form-select-sm me-2" style="width: auto;">
+                  <!-- Опции будут добавлены динамически из JS -->
+                </select>
+                <button id="nextPage" class="btn btn-outline-secondary btn-sm">Вперед →</button>
+              </div>
+              
+              <!-- Область с PNG страницами и холстом для рисования -->
+              <div class="card-body p-0 position-relative" id="pdfContainer">
+                <!-- Для отладки: выводим переменные -->
+                <!-- Контейнер для отображения страниц учебника (PNG) -->
+                <div class="image-container" id="pageContainer">
+                  {% for image in images %}
+                    {% set i = loop.index %}
+                    <!-- Каждая страница: первая показывается, остальные скрыты -->
+                    <img src="{{ url_for('static', filename='app/education/' + folder_name + '/' + image) }}" 
+                         alt="Page {{ i }}" 
+                         id="pageImage_{{ i }}" 
+                         class="pageImage" 
+                         style="display: {% if i == 1 %}block{% else %}none{% endif %}; width:100%;">
+                  {% endfor %}
+                </div>
+              
+                <!-- Холст для рисования поверх страниц -->
+                <canvas id="drawingCanvas" style="position: absolute; top: 0; left: 0;"></canvas>
+                
+                <script>
+                  document.addEventListener("DOMContentLoaded", function() {
+                    // Элементы
+                    const container = document.getElementById('pdfContainer');
+                    const canvas = document.getElementById('drawingCanvas');
+                    const ctx = canvas.getContext('2d');
+                    const pageSelector = document.getElementById('pageSelector');
+                    const prevBtn = document.getElementById('prevPage');
+                    const nextBtn = document.getElementById('nextPage');
+                    
+                    // Логика для холста (рисование)
+                    function resizeCanvas() {
+                      canvas.width = container.offsetWidth;
+                      canvas.height = container.offsetHeight;
+                    }
+                    resizeCanvas();
+                    window.addEventListener('resize', resizeCanvas);
+                    
+                    // Данные о страницах (из Jinja)
+                    const folderName = "{{ folder_name }}";
+                    const images = {{ images|tojson }};
+
+                    // Текущая страница и общее количество
+                    let currentPage = 1;
+                    const totalPages = images.length;
+                    
+                    // Функция показать заданную страницу
+                    function showPage(pageNum) {
+                      // Скрываем все <img>
+                      for (let i = 1; i <= totalPages; i++) {
+                        const img = document.getElementById(`pageImage_${i}`);
+                        if (img) {
+                          img.style.display = (i === pageNum) ? 'block' : 'none';
+                        }
+                      }
+                      // Обновляем селектор
+                      pageSelector.value = pageNum;
+                    }
+                    
+                    // Инициализация селектора
+                    for (let i = 1; i <= totalPages; i++) {
+                      const option = document.createElement('option');
+                      option.value = i;
+                      option.textContent = `Страница ${i}`;
+                      if (i === currentPage) {
+                        option.selected = true;
+                      }
+                      pageSelector.appendChild(option);
+                    }
+                    
+                    // События на кнопки
+                    prevBtn.addEventListener('click', () => {
+                      if (currentPage > 1) {
+                        currentPage--;
+                        showPage(currentPage);
+                      }
+                    });
+                    nextBtn.addEventListener('click', () => {
+                      if (currentPage < totalPages) {
+                        currentPage++;
+                        showPage(currentPage);
+                      }
+                    });
+                    
+                    // Событие на селектор
+                    pageSelector.addEventListener('change', (e) => {
+                      currentPage = parseInt(e.target.value, 10);
+                      showPage(currentPage);
+                    });
+                    
+                    // Изначально показываем 1 страницу
+                    showPage(currentPage);
+                  });
+                </script>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Правая часть (колонка с дополнительной информацией и заметками) -->
+          <div class="col-xxl-4">
+            <!-- Карточка: Дополнительная информация -->
+            <div class="card mb-3">
+              <div class="card-body">
+                <h6 class="fw-bold">Дополнительная информация</h6>
+                <p class="text-muted mb-2">
+                  Учебник «Mathematics Grade 3» — это пособие, разработанное с учётом возрастных особенностей и программы начального образования. В нём представлен увлекательный материал для закрепления базовых математических навыков: сложения, вычитания, умножения и деления.
+                </p>
+                <!-- Блок для изображения учебника -->
+                <div class="text-center">
+                  <img src="{{ url_for('static', filename='app/education/math.png') }}" 
+                       alt="Учебник Математика" 
+                       style="max-width: 100%; height: auto; border-radius: 6px;">
+                </div>
+              </div>
+            </div>
+            <!-- Карточка: Заметки -->
+            <div class="card">
+              <div class="card-body">
+                <h6 class="fw-bold">Заметки</h6>
+                <p class="text-muted fs-7">
+                  Любая полезная информация для ученика или преподавателя.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
-        <span class="badge bg-primary">Готово 4 из 5 упражнений</span>
-      </div>
-  
-      <!-- Область с PDF -->
-      <div class="card-body p-0 position-relative">
-        <!-- Используем <embed> для быстрого встраивания PDF. 
-             Переменная pdf_file передается из бекенда -->
-        <embed 
-          src="{{ pdf_file }}" 
-          type="application/pdf" 
-          width="100%" 
-          height="900px" 
-          style="border: none;"
-        />
-        <script>
-          // Выводим значение pdf_file в консоль браузера
-          console.log("PDF File:", "{{ pdf_file }}");
-        </script>
-        <!-- Небольшой блок для ввода перевода можно добавить здесь, если требуется -->
-      </div>
-    </div>
-  </div>
-  
-  <!-- Правая часть (колонка с дополнительной информацией и заметками) -->
-  <div class="col-xxl-4">
-    <!-- Карточка: Дополнительная информация -->
-    <div class="card mb-3">
-      <div class="card-body">
-        <h6 class="fw-bold">Дополнительная информация</h6>
-        <p class="text-muted mb-2">
-          Учебник «Mathematics Grade 3» — это пособие, разработанное с учётом возрастных особенностей и программы начального образования. В нём представлен увлекательный материал для закрепления базовых математических навыков: сложения, вычитания, умножения и деления.
-        </p>
-        <!-- Блок для изображения учебника -->
-        <div class="text-center">
-          <img src="{{ url_for('static', filename='app/education/math.png') }}" 
-               alt="Учебник Математика" 
-               style="max-width: 100%; height: auto; border-radius: 6px;" />
-        </div>
-      </div>
-    </div>
-    <!-- Карточка: Заметки -->
-    <div class="card">
-      <div class="card-body">
-        <h6 class="fw-bold">Заметки</h6>
-        <p class="text-muted fs-7">
-          Любая полезная информация для ученика или преподавателя.
-        </p>
-      </div>
-    </div>
-  </div>
-</div>
          
         <div class="modal fade" id="authentication-modal" tabindex="-1" role="dialog" aria-labelledby="authentication-modal-label" aria-hidden="true">
           <div class="modal-dialog mt-6" role="document">

@@ -66,26 +66,42 @@ def course_list():
 @app.route('/course/<subject_slug>')
 def course_page(subject_slug):
     textbooks = get_textbooks()
-    pdf_file = None
-    # Ищем учебник, у которого route заканчивается на subject_slug
-    # или slug можно сравнить с преобразованным названием.
+    selected_book = None
+    # Ищем учебник по slug (из поля route)
     for book in textbooks:
-        # Предположим, что route выглядит как "/course/some-slug"
         route = book.get("route", "")
-        # Удалим префикс '/course/' и сравним с subject_slug
         if route.startswith("/course/"):
             book_slug = route[len("/course/"):]
-            print(f'Book Slug: {book_slug}')
-            print(f'Subject Slug: {subject_slug}')
             if book_slug == subject_slug:
-                pdf_file = book.get("pdf", None)
+                selected_book = book
                 break
-    # Если pdf_file не найден, можно задать значение по умолчанию (например, пустую строку)
-    if pdf_file is None:
-        pdf_file = ""
-    print()
-    print(f'PDF File: {pdf_file}')
-    return render_template('math-page.html', pdf_file=pdf_file, subject_slug=subject_slug)
+
+    if not selected_book:
+        flash("Учебник не найден")
+        return redirect(url_for("index"))
+
+    # Получаем папку с PNG файлами из JSON (ключ "book_png")
+    book_png_folder = selected_book.get("book_png", "")
+    images = []
+    folder_name = ""
+    if book_png_folder:
+        # Предполагается, что в JSON хранится абсолютный путь относительно static,
+        # например: "/static/app/education/Gramatica_en_uso_U_1_22__39_43_compressed_1/"
+        folder_name = os.path.basename(os.path.normpath(book_png_folder))
+        # Формируем абсолютный путь к папке на диске:
+        abs_folder_path = os.path.join(app.root_path, book_png_folder.lstrip("/"))
+        try:
+            # Получаем список файлов с расширением .png и сортируем их
+            images = sorted([f for f in os.listdir(abs_folder_path) if f.lower().endswith('.png')])
+            # Для удобства в шаблоне передадим список с индексами и именами файлов
+            # Путь к файлам будет формироваться через url_for('static', filename=...)
+        except Exception as e:
+            flash("Ошибка при чтении папки с изображениями: " + str(e))
+    else:
+        flash("Учебник не содержит извлечённых изображений.")
+    
+    # Передаем в шаблон: список изображений, имя папки (если нужно) и subject_slug
+    return render_template('math-page.html', images=images, folder_name=folder_name, subject_slug=subject_slug)
 
 @app.route('/math_page')
 def math_page():
@@ -106,6 +122,30 @@ def generate_pdf_preview(filepath, preview_path):
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
+def extract_all_pages_from_pdf(filepath, output_folder):
+    """
+    Извлекает все страницы PDF в формате PNG и сохраняет их в output_folder.
+    Возвращает список относительных путей к сохранённым изображениям.
+    """
+    try:
+        doc = pymupdf.open(filepath)
+        image_paths = []
+        for page_num in range(len(doc)):
+            page = doc.load_page(page_num)
+            pix = page.get_pixmap()
+            output_filename = f"page_{page_num+1}.png"
+            output_path = os.path.join(output_folder, output_filename)
+            pix.save(output_path)
+            # Формируем относительный путь относительно папки static
+            rel_path = os.path.relpath(output_path, os.path.join(app.root_path, "static"))
+            rel_path = "/" + rel_path.replace(os.path.sep, "/")
+            image_paths.append(rel_path)
+        doc.close()
+        return image_paths
+    except Exception as e:
+        print("Ошибка при извлечении изображений из PDF:", e)
+        return None
+
 @app.route('/add_course_page', methods=['GET', 'POST'])
 def add_course_page():
     if request.method == 'POST':
@@ -124,36 +164,60 @@ def add_course_page():
             
             ext = filename.rsplit('.', 1)[1].lower()
             pdf_path = ""
+            book_png = ""
             if ext == 'pdf':
                 try:
-                    preview_filename = "preview_" + os.path.splitext(filename)[0] + ".png"
-                    preview_path = os.path.join(PREVIEW_FOLDER, preview_filename)
-                    success = generate_pdf_preview(filepath, preview_path)
-                    if success:
-                        image_for_json = "static/app/education/" + preview_filename
+                    # Создаем папку для извлечённых PNG-страниц
+                    folder_name = os.path.splitext(filename)[0]
+                    output_folder = os.path.join(PREVIEW_FOLDER, folder_name)
+                    os.makedirs(output_folder, exist_ok=True)
+                    image_paths = extract_all_pages_from_pdf(filepath, output_folder)
+                    if image_paths and len(image_paths) > 0:
+                        # Используем первую страницу как превью
+                        image_for_json = "/static/app/education/" + folder_name + "/" + os.path.basename(image_paths[0])
+                        # Сохраняем путь к папке с PNG
+                        book_png = "/static" + os.path.dirname(image_paths[0]) + "/"
                     else:
-                        flash("Не удалось создать превью PDF.")
-                        image_for_json = "uploads/" + filename
-                    # Формируем URL для PDF через маршрут uploaded_file
+                        flash("Не удалось извлечь изображения из PDF.")
+                        image_for_json = url_for('uploaded_file', filename=filename)
+                        book_png = ""
+                    # Формируем URL для оригинального PDF через маршрут uploaded_file
                     pdf_path = url_for('uploaded_file', filename=filename)
                     if not pdf_path.startswith('/'):
                         pdf_path = '/' + pdf_path
                 except Exception as e:
-                    flash("Ошибка при конвертации PDF: " + str(e))
-                    image_for_json = "uploads/" + filename
+                    flash("Ошибка при извлечении изображений из PDF: " + str(e))
+                    image_for_json = url_for('uploaded_file', filename=filename)
                     pdf_path = url_for('uploaded_file', filename=filename)
                     if not pdf_path.startswith('/'):
                         pdf_path = '/' + pdf_path
+                    book_png = ""
             else:
-                image_for_json = "uploads/" + filename
-                        
+                # Если загружено изображение, конвертируем в PNG, если нужно
+                if ext != 'png':
+                    try:
+                        from PIL import Image
+                        img = Image.open(filepath)
+                        converted_filename = "converted_" + os.path.splitext(filename)[0] + ".png"
+                        converted_path = os.path.join(PREVIEW_FOLDER, converted_filename)
+                        img.save(converted_path, "PNG")
+                        image_for_json = "/static/app/education/" + converted_filename
+                    except Exception as e:
+                        flash("Ошибка при конвертации изображения: " + str(e))
+                        image_for_json = url_for('uploaded_file', filename=filename)
+                else:
+                    image_for_json = url_for('uploaded_file', filename=filename)
+                pdf_path = ""  # Для изображений поле pdf оставляем пустым
+                book_png = ""  # И также поле book_png
+        
             subject_name = os.path.splitext(filename)[0][:10]
             subject_slug = subject_name.replace(" ", "-").lower()
             
             new_entry = {
                 "subject": subject_name,
                 "image": image_for_json,
-                "pdf": pdf_path,
+                "pdf": pdf_path,         # URL оригинального PDF
+                "book_png": book_png,    # URL к папке с PNG-изображениями
                 "rating": [0, 0, 0, 0, 0],
                 "progress": "Новый учебник",
                 "route": "/course/" + subject_slug
@@ -164,7 +228,6 @@ def add_course_page():
             flash('Неподдерживаемый формат файла')
             return redirect(request.url)
     return render_template('add-course-page.html')
-
 @app.route('/my_courses')
 def my_courses():
     return render_template('my-courses.html')

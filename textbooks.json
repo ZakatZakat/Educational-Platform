@@ -78,5 +78,95 @@
         ],
         "progress": "Новый учебник",
         "route": "/course/-_._._1912"
+    },
+    {
+        "subject": "Golitsinsk",
+        "image": "/static/app/education/Golitsinskiy_Y._Grammatika_Angliyskiy_yazik_Uprajneniya1/page_1.png",
+        "pdf": "/uploads/Golitsinskiy_Y._Grammatika_Angliyskiy_yazik_Uprajneniya1.pdf",
+        "book_png": "/static/app/education/Golitsinskiy_Y._Grammatika_Angliyskiy_yazik_Uprajneniya1/",
+        "rating": [
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "progress": "Новый учебник",
+        "route": "/course/golitsinsk"
+    },
+    {
+        "subject": "4_1_",
+        "image": "/static/app/education/4_1_/page_1.png",
+        "pdf": "/uploads/4_1_.pdf",
+        "book_png": "/static/app/education/4_1_/",
+        "rating": [
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "progress": "Новый учебник",
+        "route": "/course/4_1_"
+    },
+    {
+        "subject": "Golitsinsk",
+        "image": "/static/app/education/Golitsinskiy_Y._Grammatika_Angliyskiy_yazik_Uprajneniya1/page_1.png",
+        "pdf": "/uploads/Golitsinskiy_Y._Grammatika_Angliyskiy_yazik_Uprajneniya1.pdf",
+        "book_png": "/static/app/education/Golitsinskiy_Y._Grammatika_Angliyskiy_yazik_Uprajneniya1/",
+        "rating": [
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "progress": "Новый учебник",
+        "route": "/course/golitsinsk"
+    },
+    {
+        "subject": "Teh_reglam",
+        "image": "/static/app/education/Teh_reglament_car_compressed-2/page_1.png",
+        "pdf": "/uploads/Teh_reglament_car_compressed-2.pdf",
+        "book_png": "/static/app/education/Teh_reglament_car_compressed-2/",
+        "rating": [
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "progress": "Новый учебник",
+        "route": "/course/teh_reglam"
+    },
+    {
+        "subject": "1_compress",
+        "image": "/static/app/education/page_1.png",
+        "pdf": "/uploads/1_compressed_1.pdf",
+        "book_png": "/static/app/education/1_compressed_1/",
+        "rating": [
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "progress": "Новый учебник",
+        "route": "/course/1_compress"
+    },
+    {
+        "subject": "1181_3__3_",
+        "image": "/static/app/education/1181_3__3__2__1______2015_112_1/page_1.png",
+        "pdf": "/uploads/1181_3__3__2__1______2015_112_1.pdf",
+        "book_png": "/static/app/education/1181_3__3__2__1______2015_112_1/",
+        "rating": [
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "progress": "Новый учебник",
+        "route": "/course/1181_3__3_"
     }
 ]
