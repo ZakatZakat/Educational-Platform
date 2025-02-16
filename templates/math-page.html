@@ -568,7 +568,7 @@ style="background-color: #F8F9FA; border-radius: 8px; width: 100%; max-width: 40
               <div class="px-3 py-2 d-flex align-items-center">
                 <button id="prevPage" class="btn btn-outline-secondary btn-sm me-2">← Назад</button>
                 <select id="pageSelector" class="form-select form-select-sm me-2" style="width: auto;">
-                  <!-- Опции будут добавлены динамически из JS -->
+                  <!-- Опции будут добавлены динамически через JS -->
                 </select>
                 <button id="nextPage" class="btn btn-outline-secondary btn-sm">Вперед →</button>
               </div>
@@ -576,6 +576,9 @@ style="background-color: #F8F9FA; border-radius: 8px; width: 100%; max-width: 40
               <!-- Область с PNG страницами и холстом для рисования -->
               <div class="card-body p-0 position-relative" id="pdfContainer">
                 <!-- Для отладки: выводим переменные -->
+                <p>Folder: {{ folder_name }}</p>
+                <p>Images: {{ images|tojson }}</p>
+                
                 <!-- Контейнер для отображения страниц учебника (PNG) -->
                 <div class="image-container" id="pageContainer">
                   {% for image in images %}
@@ -589,8 +592,31 @@ style="background-color: #F8F9FA; border-radius: 8px; width: 100%; max-width: 40
                   {% endfor %}
                 </div>
               
-                <!-- Холст для рисования поверх страниц -->
+                <!-- Холст для рисования поверх страниц (если требуется) -->
                 <canvas id="drawingCanvas" style="position: absolute; top: 0; left: 0;"></canvas>
+                
+                <!-- Область для ввода значений поверх изображений -->
+                <div id="inputOverlay" contenteditable="true" style="
+                    position: absolute;
+                    top: 120px;
+                    left: 50px;
+                    background-color: rgba(255, 255, 255, 0.8);
+                    padding: 8px;
+                    border: 1px dashed #333;
+                    border-radius: 4px;
+                    width: 200px;
+                    z-index: 10;">
+                  Введите значения...
+                </div>
+                <!-- Результат проверки, отображается рядом с областью ввода -->
+                <span id="resultOverlay" style="
+                    position: absolute;
+                    top: 120px;
+                    left: calc(50px + 210px); /* 50px + ширина 200px + небольшой отступ */
+                    font-size: 24px;
+                    z-index: 11;">
+                </span>
+                
                 
                 <script>
                   document.addEventListener("DOMContentLoaded", function() {
@@ -601,69 +627,107 @@ style="background-color: #F8F9FA; border-radius: 8px; width: 100%; max-width: 40
                     const pageSelector = document.getElementById('pageSelector');
                     const prevBtn = document.getElementById('prevPage');
                     const nextBtn = document.getElementById('nextPage');
-                    
-                    // Логика для холста (рисование)
+                    const inputOverlay = document.getElementById('inputOverlay');
+                    const checkBtn = document.getElementById('checkAnswers');
+                    const resultOverlay = document.getElementById('resultOverlay');
+              
+                    // Настройка холста
                     function resizeCanvas() {
                       canvas.width = container.offsetWidth;
                       canvas.height = container.offsetHeight;
                     }
                     resizeCanvas();
                     window.addEventListener('resize', resizeCanvas);
-                    
-                    // Данные о страницах (из Jinja)
+              
+                    // Данные из шаблона
                     const folderName = "{{ folder_name }}";
                     const images = {{ images|tojson }};
-
-                    // Текущая страница и общее количество
                     let currentPage = 1;
                     const totalPages = images.length;
-                    
-                    // Функция показать заданную страницу
+              
+                    // Ожидаемые ответы для каждой страницы (пример)
+                    const expectedAnswers = {
+                      1: "answer1",
+                      2: "answer2",
+                      3: "answer3"
+                      // Добавьте ожидаемые ответы для остальных страниц при необходимости
+                    };
+              
+                    // Инициализация селектора страниц
+                    for (let i = 1; i <= totalPages; i++) {
+                      const option = document.createElement('option');
+                      option.value = i;
+                      option.textContent = `Страница ${i}`;
+                      if (i === currentPage) option.selected = true;
+                      pageSelector.appendChild(option);
+                    }
+              
+                    // Функция для отображения заданной страницы
                     function showPage(pageNum) {
-                      // Скрываем все <img>
                       for (let i = 1; i <= totalPages; i++) {
                         const img = document.getElementById(`pageImage_${i}`);
                         if (img) {
                           img.style.display = (i === pageNum) ? 'block' : 'none';
                         }
                       }
-                      // Обновляем селектор
                       pageSelector.value = pageNum;
+                      currentPage = pageNum;
+                      updateInputOverlay(pageNum);
+                      // При переключении страницы очищаем результат проверки
+                      resultOverlay.innerHTML = "";
                     }
-                    
-                    // Инициализация селектора
-                    for (let i = 1; i <= totalPages; i++) {
-                      const option = document.createElement('option');
-                      option.value = i;
-                      option.textContent = `Страница ${i}`;
-                      if (i === currentPage) {
-                        option.selected = true;
-                      }
-                      pageSelector.appendChild(option);
+              
+                    // Объект с координатами для каждой страницы (настраивайте по своему усмотрению)
+                    const overlayPositions = {
+                      1: { top: '120px', left: '50px', width: '200px' },
+                      2: { top: '150px', left: '70px', width: '250px' },
+                      3: { top: '100px', left: '30px', width: '180px' }
+                      // Добавьте настройки для других страниц, если необходимо
+                    };
+              
+                    // Функция обновления положения области ввода
+                    function updateInputOverlay(pageNum) {
+                      const pos = overlayPositions[pageNum] || { top: '120px', left: '50px', width: '200px' };
+                      inputOverlay.style.top = pos.top;
+                      inputOverlay.style.left = pos.left;
+                      inputOverlay.style.width = pos.width;
                     }
-                    
-                    // События на кнопки
+              
+                    // Обработчики для кнопок и селектора
                     prevBtn.addEventListener('click', () => {
                       if (currentPage > 1) {
-                        currentPage--;
-                        showPage(currentPage);
+                        showPage(currentPage - 1);
                       }
                     });
                     nextBtn.addEventListener('click', () => {
                       if (currentPage < totalPages) {
-                        currentPage++;
-                        showPage(currentPage);
+                        showPage(currentPage + 1);
                       }
                     });
-                    
-                    // Событие на селектор
                     pageSelector.addEventListener('change', (e) => {
-                      currentPage = parseInt(e.target.value, 10);
-                      showPage(currentPage);
+                      showPage(parseInt(e.target.value, 10));
                     });
-                    
+              
                     // Изначально показываем 1 страницу
                     showPage(currentPage);
+              
+                    console.log("PNG images folder:", folderName);
+                    console.log("List of images:", images);
+              
+                    inputOverlay.addEventListener('blur', () => {
+                      console.log("Input overlay content:", inputOverlay.innerText);
+                    });
+              
+                    // Обработка проверки ответов
+                    checkBtn.addEventListener('click', () => {
+                      const userAnswer = inputOverlay.innerText.trim().toLowerCase();
+                      const expected = (expectedAnswers[currentPage] || "").toLowerCase();
+                      if (userAnswer === expected) {
+                        resultOverlay.innerHTML = '<i class="fas fa-check" style="color:green;"></i>';
+                      } else {
+                        resultOverlay.innerHTML = '<i class="fas fa-times" style="color:red;"></i>';
+                      }
+                    });
                   });
                 </script>
               </div>
@@ -680,13 +744,19 @@ style="background-color: #F8F9FA; border-radius: 8px; width: 100%; max-width: 40
                   Учебник «Mathematics Grade 3» — это пособие, разработанное с учётом возрастных особенностей и программы начального образования. В нём представлен увлекательный материал для закрепления базовых математических навыков: сложения, вычитания, умножения и деления.
                 </p>
                 <!-- Блок для изображения учебника -->
-                <div class="text-center">
+                <div class="text-center mb-3">
                   <img src="{{ url_for('static', filename='app/education/math.png') }}" 
                        alt="Учебник Математика" 
                        style="max-width: 100%; height: auto; border-radius: 6px;">
                 </div>
+                <!-- Блок для проверки ответов -->
+                <div class="text-center">
+                  <button id="checkAnswers" class="btn btn-success btn-sm">Проверить</button>
+                  <span id="resultRight" style="margin-left: 10px; font-size: 24px;"></span>
+                </div>
               </div>
             </div>
+            
             <!-- Карточка: Заметки -->
             <div class="card">
               <div class="card-body">
