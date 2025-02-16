@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory
 from werkzeug.utils import secure_filename
 from pdf2image import convert_from_path
 import json
@@ -63,6 +63,30 @@ def index():
 def course_list():
     return render_template('course-list.html')
 
+@app.route('/course/<subject_slug>')
+def course_page(subject_slug):
+    textbooks = get_textbooks()
+    pdf_file = None
+    # Ищем учебник, у которого route заканчивается на subject_slug
+    # или slug можно сравнить с преобразованным названием.
+    for book in textbooks:
+        # Предположим, что route выглядит как "/course/some-slug"
+        route = book.get("route", "")
+        # Удалим префикс '/course/' и сравним с subject_slug
+        if route.startswith("/course/"):
+            book_slug = route[len("/course/"):]
+            print(f'Book Slug: {book_slug}')
+            print(f'Subject Slug: {subject_slug}')
+            if book_slug == subject_slug:
+                pdf_file = book.get("pdf", None)
+                break
+    # Если pdf_file не найден, можно задать значение по умолчанию (например, пустую строку)
+    if pdf_file is None:
+        pdf_file = ""
+    print()
+    print(f'PDF File: {pdf_file}')
+    return render_template('math-page.html', pdf_file=pdf_file, subject_slug=subject_slug)
+
 @app.route('/math_page')
 def math_page():
     return render_template('math-page.html')
@@ -77,6 +101,10 @@ def generate_pdf_preview(filepath, preview_path):
     except Exception as e:
         print("Ошибка при генерации превью с помощью PyMuPDF:", e)
         return False
+
+@app.route('/uploads/<path:filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 @app.route('/add_course_page', methods=['GET', 'POST'])
 def add_course_page():
@@ -95,29 +123,40 @@ def add_course_page():
             flash('Файл успешно загружен')
             
             ext = filename.rsplit('.', 1)[1].lower()
+            pdf_path = ""
             if ext == 'pdf':
                 try:
                     preview_filename = "preview_" + os.path.splitext(filename)[0] + ".png"
-                    # Сохраняем превью в папку static/app/education/
                     preview_path = os.path.join(PREVIEW_FOLDER, preview_filename)
                     success = generate_pdf_preview(filepath, preview_path)
                     if success:
-                        image_for_json = "static/app/education/" + preview_filename  # относительный путь относительно папки static
+                        image_for_json = "static/app/education/" + preview_filename
                     else:
                         flash("Не удалось создать превью PDF.")
                         image_for_json = "uploads/" + filename
+                    # Формируем URL для PDF через маршрут uploaded_file
+                    pdf_path = url_for('uploaded_file', filename=filename)
+                    if not pdf_path.startswith('/'):
+                        pdf_path = '/' + pdf_path
                 except Exception as e:
                     flash("Ошибка при конвертации PDF: " + str(e))
                     image_for_json = "uploads/" + filename
+                    pdf_path = url_for('uploaded_file', filename=filename)
+                    if not pdf_path.startswith('/'):
+                        pdf_path = '/' + pdf_path
             else:
                 image_for_json = "uploads/" + filename
+                        
+            subject_name = os.path.splitext(filename)[0][:10]
+            subject_slug = subject_name.replace(" ", "-").lower()
             
             new_entry = {
-                "subject": os.path.splitext(filename)[0][:10],
+                "subject": subject_name,
                 "image": image_for_json,
+                "pdf": pdf_path,
                 "rating": [0, 0, 0, 0, 0],
                 "progress": "Новый учебник",
-                "route": "#"
+                "route": "/course/" + subject_slug
             }
             add_textbook_entry(new_entry)
             return redirect(url_for('add_course_page'))
@@ -125,7 +164,6 @@ def add_course_page():
             flash('Неподдерживаемый формат файла')
             return redirect(request.url)
     return render_template('add-course-page.html')
-
 
 @app.route('/my_courses')
 def my_courses():

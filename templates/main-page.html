@@ -595,19 +595,11 @@ style="background-color: #F8F9FA; border-radius: 8px; width: 100%; max-width: 40
                     <div class="row g-3">
                       {% for book in textbooks %}
                       <div class="col-12 col-sm-6 col-md-4 col-lg-4">
-                        <div class="p-3 h-100" 
-                             style="border: 2px solid #E1DDFE; border-radius: 12px;">
+                        <div class="p-3 h-100" style="border: 2px solid #E1DDFE; border-radius: 12px;">
                           <div class="d-flex align-items-center h-100">
                             <!-- Обложка -->
-                            <div style="
-                              width: 100px; 
-                              height: 140px; 
-                              margin-right: 16px; 
-                              overflow: hidden; 
-                              border-radius: 8px;">
-                              <img src="{{ book.image }}"
-                                   alt="{{ book.subject }}"
-                                   style="width: 100%; height: 100%; object-fit: cover;">
+                            <div style="width: 100px; height: 140px; margin-right: 16px; overflow: hidden; border-radius: 8px;">
+                              <img src="{{ book.image }}" alt="{{ book.subject }}" style="width: 100%; height: 100%; object-fit: cover;">
                             </div>
                             <!-- Основная информация -->
                             <div class="flex-grow-1 d-flex flex-column justify-content-between">
@@ -625,37 +617,14 @@ style="background-color: #F8F9FA; border-radius: 8px; width: 100%; max-width: 40
                                   {% endfor %}
                                 </p>
                                 <p class="text-muted mb-1" style="font-size: 0.875rem;">{{ book.progress }}</p>
-                                <div style="
-                                  background-color: #C8ABF7;
-                                  height: 4px;
-                                  width: 120px;
-                                  border-radius: 2px;
-                                  margin-bottom: 12px;">
-                                </div>
+                                <div style="background-color: #C8ABF7; height: 4px; width: 120px; border-radius: 2px; margin-bottom: 12px;"></div>
                               </div>
                               <div>
-                                {% if book.route %}
-                                  <a href="{{ book.route }}"
-                                     class="btn"
-                                     style="
-                                       background-color: #B084F6; 
-                                       color: #fff; 
-                                       border-radius: 8px; 
-                                       padding: 6px 16px; 
-                                       font-weight: 500;">
-                                    Начать
-                                  </a>
-                                {% else %}
-                                  <button class="btn"
-                                          style="
-                                            background-color: #B084F6; 
-                                            color: #fff; 
-                                            border-radius: 8px; 
-                                            padding: 6px 16px; 
-                                            font-weight: 500;">
-                                    Начать
-                                  </button>
-                                {% endif %}
+                                <a href="{{ book.route }}"
+                                   class="btn"
+                                   style="background-color: #B084F6; color: #fff; border-radius: 8px; padding: 6px 16px; font-weight: 500;">
+                                  Начать
+                                </a>
                               </div>
                             </div>
                           </div>
