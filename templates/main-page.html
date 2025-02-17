@@ -138,6 +138,22 @@
               <div class="card-header bg-body-tertiary py-2 d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-md-between">
                 <h6 class="mb-0">Упражнения на сегодня</h6>
                 <!-- Навигация по вкладкам -->
+                <style>
+                  /* Окрашиваем все кнопки .nav-pills в #C8ABF7 */
+                  .nav-pills .nav-link {
+                    background-color: #C8ABF7;
+                    color: #fff;                /* Белый текст */
+                    margin-right: 5px;          /* Небольшой отступ между кнопками */
+                    border-radius: 6px;         /* Закругление */
+                  }
+                
+                  /* Для активной (выбранной) вкладки можно задать чуть другой оттенок */
+                  .nav-pills .nav-link.active {
+                    background-color: #B084F6;
+                    color: #fff;
+                  }
+                </style>
+                
                 <ul class="nav nav-pills mt-2 mt-md-0" id="exerciseTabs" role="tablist">
                   <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true">
@@ -151,17 +167,12 @@
                   </li>
                   <li class="nav-item" role="presentation">
                     <button class="nav-link" id="chemistry-tab" data-bs-toggle="tab" data-bs-target="#chemistry" type="button" role="tab" aria-controls="chemistry" aria-selected="false">
-                      Английский Язык
+                      Склады
                     </button>
                   </li>
                   <li class="nav-item" role="presentation">
                     <button class="nav-link" id="russian-tab" data-bs-toggle="tab" data-bs-target="#russian" type="button" role="tab" aria-controls="russian" aria-selected="false">
-                      Русский Язык
-                    </button>
-                  </li>
-                  <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="math-tab" data-bs-toggle="tab" data-bs-target="#math" type="button" role="tab" aria-controls="math" aria-selected="false">
-                      Испанский Язык
+                      Страхование
                     </button>
                   </li>
                 </ul>

@@ -139,7 +139,7 @@ style="background-color: #F8F9FA; border-radius: 8px; width: 100%; max-width: 40
   </a>
   
   <!-- Учебники -->
-  <a class="nav-link" href="/static/app/education/textbooks.html" role="button">
+  <a class="nav-link" href="{{ url_for('index') }}" role="button">
     <div class="d-flex align-items-center">
       <span class="nav-link-icon"><span class="fas fa-book"></span></span>
       <span class="nav-link-text ps-1">Учебники</span>
@@ -190,7 +190,6 @@ style="background-color: #F8F9FA; border-radius: 8px; width: 100%; max-width: 40
                   <h5 class="mb-0">Упражнения из учебника</h5>
                   <small class="text-muted">{{ selected_book.subject if selected_book else "" }}</small>
                 </div>
-                <span class="badge bg-primary">Готово 4 из 5 упражнений</span>
               </div>
               
               <!-- Навигация по страницам -->
