@@ -532,7 +532,7 @@ style="background-color: #F8F9FA; border-radius: 8px; width: 100%; max-width: 40
 
         <!-- Статус курсов -->
         <div class="row g-3 mb-3">
-          <!-- Левая часть (просмотр учебника: PNG-страницы, навигация, области ввода и аннотации) -->
+          <!-- Левая колонка (просмотр учебника: PNG-страницы, навигация, области ввода и аннотации) -->
           <div class="col-xxl-8 d-flex flex-column align-items-stretched">
             <div class="card mb-3">
               <!-- Заголовок и статус -->
@@ -578,7 +578,37 @@ style="background-color: #F8F9FA; border-radius: 8px; width: 100%; max-width: 40
               
                 <script>
                   document.addEventListener("DOMContentLoaded", function() {
-                    // Элементы левой части
+                    // --- Функция натуральной сортировки (chunkify approach) ---
+                    function naturalSort(a, b) {
+                      function chunkify(t) {
+                        const tz = [];
+                        let x = 0, y = -1, n = 0, i;
+                        while((i = t.charAt(x++))) {
+                          let m = (i >= '0' && i <= '9');
+                          if(m !== n) {
+                            tz[++y] = "";
+                            n = m;
+                          }
+                          tz[y] += i;
+                        }
+                        return tz;
+                      }
+                      const aa = chunkify(a), bb = chunkify(b);
+                      for(let i = 0; aa[i] && bb[i]; i++){
+                        if(aa[i] !== bb[i]){
+                          const c = Number(aa[i]), d = Number(bb[i]);
+                          if(!isNaN(c) && !isNaN(d)){
+                            return c - d;
+                          } else {
+                            return aa[i] > bb[i] ? 1 : -1;
+                          }
+                        }
+                      }
+                      return aa.length - bb.length;
+                    }
+                    // --- Конец натуральной сортировки ---
+        
+                    // Элементы
                     const container = document.getElementById('pdfContainer');
                     const canvas = document.getElementById('drawingCanvas');
                     const ctx = canvas.getContext('2d');
@@ -587,43 +617,75 @@ style="background-color: #F8F9FA; border-radius: 8px; width: 100%; max-width: 40
                     const nextBtn = document.getElementById('nextPage');
                     const overlaysContainer = document.getElementById('inputOverlaysContainer');
                     const resultOverlay = document.getElementById('resultOverlay');
-              
+                    
                     function resizeCanvas() {
                       canvas.width = container.offsetWidth;
                       canvas.height = container.offsetHeight;
                     }
                     resizeCanvas();
                     window.addEventListener('resize', resizeCanvas);
-              
+                    
                     // Данные из шаблона
                     const folderName = "{{ folder_name }}";
-                    const images = {{ images|tojson }};
+                    let images = {{ images|tojson }};
+                    // Применяем натуральную сортировку
+                    images.sort(naturalSort);
+                    
                     let currentPage = 1;
                     const totalPages = images.length;
-              
-                    // Массив с ожидаемыми ответами для каждой страницы (пример)
+                    
+                    // Объект с ожидаемыми ответами для каждой страницы (пример)
                     const expectedAnswers = {
                       1: ["answer1", "answer1b"],
                       2: ["answer2"],
                       3: ["answer3"],
-                      4: ["правильный ответ 1", "правильный ответ 2", "правильный ответ 3", "правильный ответ 4"]
-
-                      // Добавьте ожидаемые ответы для других страниц, если необходимо
+                      4: ["правильный ответ 1", "правильный ответ 2", "правильный ответ 3", "правильный ответ 4"],
+                      5: ["answer5", "answer5b", "answer5c"]
                     };
-              
-                    // Массив с аннотациями, заданными вручную (каждый объект соответствует одному полю ввода)
+                    
+                    // Массив с аннотациями (данные взяты из вашей разметки)
                     const annotations = [
-      { page: 4, label: "задача", bbox_x: 120, bbox_y: 362, bbox_width: 81, bbox_height: 65, image_name: "2.png", image_width: 637, image_height: 857 },
-      { page: 4, label: "задача", bbox_x: 120, bbox_y: 430, bbox_width: 81, bbox_height: 65, image_name: "2.png", image_width: 637, image_height: 857 },
-      { page: 4, label: "задача", bbox_x: 120, bbox_y: 550, bbox_width: 81, bbox_height: 65, image_name: "2.png", image_width: 637, image_height: 857 },
-      { page: 4, label: "задача", bbox_x: 120, bbox_y: 735, bbox_width: 81, bbox_height: 65, image_name: "2.png", image_width: 637, image_height: 857 },
-                  ]
-
-
-
-
-      
-                    // Функция для отображения заданной страницы
+                      { page: 4, label: "задача", bbox_x: 120, bbox_y: 362, bbox_width: 81, bbox_height: 65, image_name: "2.png", image_width: 637, image_height: 857 },
+                      { page: 4, label: "задача", bbox_x: 120, bbox_y: 430, bbox_width: 81, bbox_height: 65, image_name: "2.png", image_width: 637, image_height: 857 },
+                      { page: 4, label: "задача", bbox_x: 120, bbox_y: 550, bbox_width: 81, bbox_height: 65, image_name: "2.png", image_width: 637, image_height: 857 },
+                      { page: 4, label: "задача", bbox_x: 120, bbox_y: 735, bbox_width: 81, bbox_height: 65, image_name: "2.png", image_width: 637, image_height: 857 }
+                    ];
+                    
+                    // При создании каждой области ввода – добавляем обработчик фокуса для очистки placeholder
+                    function createOverlay(annotation, scale, pageNum, index) {
+                      const overlay = document.createElement('div');
+                      overlay.className = 'annotationOverlay';
+                      overlay.contentEditable = true;
+                      overlay.style.position = 'absolute';
+                      overlay.style.left = (annotation.bbox_x * scale) + 'px';
+                      overlay.style.top = (annotation.bbox_y * scale) + 'px';
+                      overlay.style.width = (annotation.bbox_width * scale) + 'px';
+                      overlay.style.height = (annotation.bbox_height * scale) + 'px';
+                      overlay.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+                      overlay.style.border = '1px dashed #333';
+                      overlay.style.borderRadius = '4px';
+                      overlay.style.padding = '2px';
+                      overlay.style.zIndex = 20;
+                      overlay.innerText = annotation.label;
+                      overlay.addEventListener("focus", function() {
+                        if (overlay.innerText.trim() === annotation.label) {
+                          overlay.innerText = "";
+                        }
+                      });
+                      overlay.id = `inputOverlay_${pageNum}_${index+1}`;
+                      return overlay;
+                    }
+                    
+                    // Инициализация селектора страниц
+                    for (let i = 1; i <= totalPages; i++) {
+                      const option = document.createElement('option');
+                      option.value = i;
+                      option.textContent = `Страница ${i}`;
+                      if (i === currentPage) option.selected = true;
+                      pageSelector.appendChild(option);
+                    }
+                    
+                    // Функция отображения страницы
                     function showPage(pageNum) {
                       for (let i = 1; i <= totalPages; i++) {
                         const img = document.getElementById(`pageImage_${i}`);
@@ -636,65 +698,34 @@ style="background-color: #F8F9FA; border-radius: 8px; width: 100%; max-width: 40
                       updateOverlays(pageNum);
                       resultOverlay.innerHTML = "";
                     }
-              
+                    
                     // Функция обновления областей ввода (аннотаций)
                     function updateOverlays(pageNum) {
-                      // Очищаем контейнер с областями ввода
                       overlaysContainer.innerHTML = "";
-                      // Фильтруем аннотации для текущей страницы
                       const pageAnnotations = annotations.filter(a => a.page === pageNum);
-                      // Вычисляем масштаб, если необходимо (например, для корректного позиционирования)
-                      // Предположим, что все аннотации для одной страницы имеют одинаковую исходную ширину
                       let scale = 1;
                       if (pageAnnotations.length > 0) {
-                        // Используем ширину текущего изображения
                         const currentImg = document.getElementById(`pageImage_${pageNum}`);
                         if (currentImg && pageAnnotations[0].image_width) {
                           scale = currentImg.offsetWidth / pageAnnotations[0].image_width;
                         }
                       }
-                      // Для каждой аннотации создаём область ввода
                       pageAnnotations.forEach((annotation, index) => {
-                        const overlay = document.createElement('div');
-                        overlay.className = 'annotationOverlay';
-                        overlay.contentEditable = true;
-                        overlay.style.position = 'absolute';
-                        overlay.style.left = (annotation.bbox_x * scale) + 'px';
-                        overlay.style.top = (annotation.bbox_y * scale) + 'px';
-                        overlay.style.width = (annotation.bbox_width * scale) + 'px';
-                        overlay.style.height = (annotation.bbox_height * scale) + 'px';
-                        overlay.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
-                        overlay.style.border = '1px dashed #333';
-                        overlay.style.borderRadius = '4px';
-                        overlay.style.padding = '2px';
-                        overlay.style.zIndex = 20;
-                        overlay.innerText = annotation.label; // выводим label, можно оставить пустым
-                        // Присваиваем уникальный id
-                        overlay.id = `inputOverlay_${pageNum}_${index+1}`;
+                        const overlay = createOverlay(annotation, scale, pageNum, index);
                         overlaysContainer.appendChild(overlay);
                       });
                     }
-              
-                    // Инициализация селектора страниц
-                    for (let i = 1; i <= totalPages; i++) {
-                      const option = document.createElement('option');
-                      option.value = i;
-                      option.textContent = `Страница ${i}`;
-                      if (i === currentPage) option.selected = true;
-                      pageSelector.appendChild(option);
-                    }
-              
+                    
                     // Обработчики переключения страниц
                     prevBtn.addEventListener('click', () => { if (currentPage > 1) showPage(currentPage - 1); });
                     nextBtn.addEventListener('click', () => { if (currentPage < totalPages) showPage(currentPage + 1); });
                     pageSelector.addEventListener('change', (e) => { showPage(parseInt(e.target.value, 10)); });
-              
+                    
                     showPage(currentPage);
-              
+                    
                     console.log("PNG images folder:", folderName);
-                    console.log("List of images:", images);
-              
-                    // Глобальная переменная для текущей страницы
+                    console.log("List of images (sorted naturally):", images);
+                    
                     window.currentPage = currentPage;
                     const originalShowPage = showPage;
                     showPage = function(pageNum) {
@@ -741,32 +772,54 @@ style="background-color: #F8F9FA; border-radius: 8px; width: 100%; max-width: 40
               document.addEventListener("DOMContentLoaded", function() {
                 const checkBtnRight = document.getElementById("checkAnswersRight");
                 const resultSpanRight = document.getElementById("resultRight");
+                // Ожидаемые ответы для каждой страницы
                 const expectedAnswers = {
                   1: ["answer1", "answer1b"],
                   2: ["answer2"],
-                  3: ["answer3"]
-                  // Добавьте ожидаемые ответы для остальных страниц
+                  3: ["answer3"],
+                  4: ["правильный ответ 1", "правильный ответ 2", "правильный ответ 3", "правильный ответ 4"],
+                  5: ["answer5", "answer5b", "answer5c"]
                 };
+          
+                // Отладка: проверим, что элемент найден и window.currentPage определена
+                console.log("checkAnswersRight button:", checkBtnRight);
+                console.log("Current page:", window.currentPage);
+          
                 checkBtnRight.addEventListener("click", function() {
-                  let allCorrect = true;
+                  console.log("Кнопка проверки нажата, currentPage =", window.currentPage);
+                  // Удаляем ранее созданные значки
+                  const existingIcons = document.querySelectorAll('.checkIcon');
+                  existingIcons.forEach(icon => icon.remove());
+            
+                  // Находим все области ввода для текущей страницы
                   const currentAnnotations = document.querySelectorAll(`[id^="inputOverlay_${window.currentPage}_"]`);
-                  // Проверяем каждое поле ввода на текущей странице
+                  console.log("Найденные области ввода:", currentAnnotations);
+            
                   currentAnnotations.forEach((overlay, index) => {
                     const userAnswer = overlay.innerText.trim().toLowerCase();
                     const expected = (expectedAnswers[window.currentPage] && expectedAnswers[window.currentPage][index] ? expectedAnswers[window.currentPage][index] : "").toLowerCase();
-                    if (userAnswer !== expected) {
-                      allCorrect = false;
+                    console.log(`Поле ${index+1}: введено "${userAnswer}", ожидается "${expected}"`);
+            
+                    const icon = document.createElement('span');
+                    icon.className = 'checkIcon';
+                    icon.style.position = 'absolute';
+                    icon.style.fontSize = '24px';
+                    // Определяем позицию: справа от области ввода
+                    const overlayLeft = parseFloat(overlay.style.left) || 0;
+                    const overlayWidth = overlay.offsetWidth;
+                    icon.style.left = (overlayLeft + overlayWidth + 5) + 'px';
+                    icon.style.top = overlay.style.top;
+                    if (userAnswer === expected && userAnswer !== "") {
+                      icon.innerHTML = '<i class="fas fa-check" style="color:green;"></i>';
+                    } else {
+                      icon.innerHTML = '<i class="fas fa-times" style="color:red;"></i>';
                     }
+                    // Добавляем значок в контейнер для областей ввода
+                    document.getElementById('inputOverlaysContainer').appendChild(icon);
                   });
-                  if (allCorrect) {
-                    resultSpanRight.innerHTML = '<i class="fas fa-check" style="color:green;"></i>';
-                  } else {
-                    resultSpanRight.innerHTML = '<i class="fas fa-times" style="color:red;"></i>';
-                  }
                 });
               });
             </script>
-          </div>
         </div>
         
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
