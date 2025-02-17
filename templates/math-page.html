@@ -605,41 +605,24 @@ style="background-color: #F8F9FA; border-radius: 8px; width: 100%; max-width: 40
                     const expectedAnswers = {
                       1: ["answer1", "answer1b"],
                       2: ["answer2"],
-                      3: ["answer3"]
+                      3: ["answer3"],
+                      4: ["правильный ответ 1", "правильный ответ 2", "правильный ответ 3", "правильный ответ 4"]
+
                       // Добавьте ожидаемые ответы для других страниц, если необходимо
                     };
               
                     // Массив с аннотациями, заданными вручную (каждый объект соответствует одному полю ввода)
                     const annotations = [
-                      // Страница 2.png
-                      { page: 2, label: "задание", bbox_x: 201, bbox_y: 367, bbox_width: 406, bbox_height: 59, image_width: 637, image_height: 857 },
-                      { page: 2, label: "задание", bbox_x: 201, bbox_y: 432, bbox_width: 416, bbox_height: 118, image_width: 637, image_height: 857 },
-                      { page: 2, label: "задание", bbox_x: 198, bbox_y: 551, bbox_width: 416, bbox_height: 243, image_width: 637, image_height: 857 },
-                      // Страница 3.png
-                      { page: 3, label: "задание", bbox_x: 46,  bbox_y: 28,  bbox_width: 405, bbox_height: 51,  image_width: 642, image_height: 855 },
-                      { page: 3, label: "задание", bbox_x: 37,  bbox_y: 85,  bbox_width: 421, bbox_height: 57,  image_width: 642, image_height: 855 },
-                      { page: 3, label: "задание", bbox_x: 25,  bbox_y: 147, bbox_width: 427, bbox_height: 78,  image_width: 642, image_height: 855 },
-                      { page: 3, label: "задание", bbox_x: 32,  bbox_y: 219, bbox_width: 421, bbox_height: 60,  image_width: 642, image_height: 855 },
-                      { page: 3, label: "задание", bbox_x: 43,  bbox_y: 280, bbox_width: 396, bbox_height: 70,  image_width: 642, image_height: 855 },
-                      { page: 3, label: "задание", bbox_x: 40,  bbox_y: 358, bbox_width: 399, bbox_height: 205, image_width: 642, image_height: 855 },
-                      { page: 3, label: "задание", bbox_x: 34,  bbox_y: 570, bbox_width: 421, bbox_height: 204, image_width: 642, image_height: 855 },
-                      // Страница 4.png
-                      { page: 4, label: "задание", bbox_x: 187, bbox_y: 376, bbox_width: 434, bbox_height: 169, image_width: 640, image_height: 847 },
-                      { page: 4, label: "задание", bbox_x: 195, bbox_y: 552, bbox_width: 424, bbox_height: 135, image_width: 640, image_height: 847 },
-                      { page: 4, label: "задание", bbox_x: 194, bbox_y: 692, bbox_width: 430, bbox_height: 49,  image_width: 640, image_height: 847 },
-                      { page: 4, label: "задание", bbox_x: 185, bbox_y: 735, bbox_width: 455, bbox_height: 58,  image_width: 640, image_height: 847 },
-                      // Страница 5.png
-                      { page: 5, label: "задание", bbox_x: 44,  bbox_y: 23,  bbox_width: 408, bbox_height: 225, image_width: 642, image_height: 856 },
-                      { page: 5, label: "задание", bbox_x: 41,  bbox_y: 250, bbox_width: 427, bbox_height: 62,  image_width: 642, image_height: 856 },
-                      { page: 5, label: "задание", bbox_x: 32,  bbox_y: 320, bbox_width: 405, bbox_height: 59,  image_width: 642, image_height: 856 },
-                      { page: 5, label: "задание", bbox_x: 36,  bbox_y: 380, bbox_width: 417, bbox_height: 100, image_width: 642, image_height: 856 },
-                      { page: 5, label: "задание", bbox_x: 36,  bbox_y: 485, bbox_width: 414, bbox_height: 65,  image_width: 642, image_height: 856 },
-                      { page: 5, label: "задание", bbox_x: 35,  bbox_y: 554, bbox_width: 407, bbox_height: 32,  image_width: 642, image_height: 856 },
-                      { page: 5, label: "задание", bbox_x: 28,  bbox_y: 593, bbox_width: 429, bbox_height: 44,  image_width: 642, image_height: 856 },
-                      { page: 5, label: "задание", bbox_x: 26,  bbox_y: 645, bbox_width: 436, bbox_height: 101, image_width: 642, image_height: 856 },
-                      { page: 5, label: "задание", bbox_x: 28,  bbox_y: 755, bbox_width: 430, bbox_height: 41,  image_width: 642, image_height: 856 }
-                    ];
-              
+      { page: 4, label: "задача", bbox_x: 120, bbox_y: 362, bbox_width: 81, bbox_height: 65, image_name: "2.png", image_width: 637, image_height: 857 },
+      { page: 4, label: "задача", bbox_x: 120, bbox_y: 430, bbox_width: 81, bbox_height: 65, image_name: "2.png", image_width: 637, image_height: 857 },
+      { page: 4, label: "задача", bbox_x: 120, bbox_y: 550, bbox_width: 81, bbox_height: 65, image_name: "2.png", image_width: 637, image_height: 857 },
+      { page: 4, label: "задача", bbox_x: 120, bbox_y: 735, bbox_width: 81, bbox_height: 65, image_name: "2.png", image_width: 637, image_height: 857 },
+                  ]
+
+
+
+
+      
                     // Функция для отображения заданной страницы
                     function showPage(pageNum) {
                       for (let i = 1; i <= totalPages; i++) {
