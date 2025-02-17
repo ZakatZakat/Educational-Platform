@@ -576,8 +576,6 @@ style="background-color: #F8F9FA; border-radius: 8px; width: 100%; max-width: 40
               <!-- Область с PNG страницами и холстом для рисования -->
               <div class="card-body p-0 position-relative" id="pdfContainer">
                 <!-- Для отладки: выводим переменные -->
-                <p>Folder: {{ folder_name }}</p>
-                <p>Images: {{ images|tojson }}</p>
                 
                 <!-- Контейнер для отображения страниц учебника (PNG) -->
                 <div class="image-container" id="pageContainer">
@@ -681,7 +679,7 @@ style="background-color: #F8F9FA; border-radius: 8px; width: 100%; max-width: 40
                     const overlayPositions = {
                       1: { top: '120px', left: '50px', width: '200px' },
                       2: { top: '150px', left: '70px', width: '250px' },
-                      3: { top: '100px', left: '30px', width: '180px' }
+                      3: { top: '500px', left: '30px', width: '180px' }
                       // Добавьте настройки для других страниц, если необходимо
                     };
               
@@ -734,19 +732,18 @@ style="background-color: #F8F9FA; border-radius: 8px; width: 100%; max-width: 40
             </div>
           </div>
           
-          <!-- Правая часть (колонка с дополнительной информацией и заметками) -->
           <div class="col-xxl-4">
             <!-- Карточка: Дополнительная информация -->
             <div class="card mb-3">
               <div class="card-body">
                 <h6 class="fw-bold">Дополнительная информация</h6>
                 <p class="text-muted mb-2">
-                  Учебник «Mathematics Grade 3» — это пособие, разработанное с учётом возрастных особенностей и программы начального образования. В нём представлен увлекательный материал для закрепления базовых математических навыков: сложения, вычитания, умножения и деления.
+                  Учебник: {{ selected_book.subject if selected_book else "" }}
                 </p>
-                <!-- Блок для изображения учебника -->
+                <!-- Блок для изображения учебника, подтягиваемый из image_preview -->
                 <div class="text-center mb-3">
-                  <img src="{{ url_for('static', filename='app/education/math.png') }}" 
-                       alt="Учебник Математика" 
+                  <img src="{{ image_preview }}" 
+                       alt="Учебник {{ selected_book.subject if selected_book else 'Mathematics Grade 3' }}" 
                        style="max-width: 100%; height: auto; border-radius: 6px;">
                 </div>
                 <!-- Блок для проверки ответов -->
@@ -756,6 +753,8 @@ style="background-color: #F8F9FA; border-radius: 8px; width: 100%; max-width: 40
                 </div>
               </div>
             </div>
+           
+            
             
             <!-- Карточка: Заметки -->
             <div class="card">

@@ -168,5 +168,35 @@
         ],
         "progress": "Новый учебник",
         "route": "/course/1181_3__3_"
+    },
+    {
+        "subject": "R_Noyshtad",
+        "image": "/static/app/education/R_Noyshtadt_E_Mey_-_Sovremennye_razmyshlenia_o_polze_istorii_dlya_tekh_kto_prinimaet_reshenia/page_1.png",
+        "pdf": "/uploads/R_Noyshtadt_E_Mey_-_Sovremennye_razmyshlenia_o_polze_istorii_dlya_tekh_kto_prinimaet_reshenia.pdf",
+        "book_png": "/static/app/education/R_Noyshtadt_E_Mey_-_Sovremennye_razmyshlenia_o_polze_istorii_dlya_tekh_kto_prinimaet_reshenia/",
+        "rating": [
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "progress": "Новый учебник",
+        "route": "/course/r_noyshtad"
+    },
+    {
+        "subject": "4_1_",
+        "image": "/static/app/education/4_1_/page_1.png",
+        "pdf": "/uploads/4_1_.pdf",
+        "book_png": "/static/app/education/4_1_/",
+        "rating": [
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "progress": "Новый учебник",
+        "route": "/course/4_1_"
     }
 ]

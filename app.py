@@ -82,6 +82,7 @@ def course_page(subject_slug):
 
     # Получаем папку с PNG файлами из JSON (ключ "book_png")
     book_png_folder = selected_book.get("book_png", "")
+    image = selected_book.get("image", "")
     images = []
     folder_name = ""
     if book_png_folder:
@@ -101,7 +102,7 @@ def course_page(subject_slug):
         flash("Учебник не содержит извлечённых изображений.")
     
     # Передаем в шаблон: список изображений, имя папки (если нужно) и subject_slug
-    return render_template('math-page.html', images=images, folder_name=folder_name, subject_slug=subject_slug)
+    return render_template('math-page.html', selected_book=selected_book, images=images, folder_name=folder_name, subject_slug=subject_slug, image_preview=image)
 
 @app.route('/math_page')
 def math_page():
@@ -228,6 +229,7 @@ def add_course_page():
             flash('Неподдерживаемый формат файла')
             return redirect(request.url)
     return render_template('add-course-page.html')
+
 @app.route('/my_courses')
 def my_courses():
     return render_template('my-courses.html')
