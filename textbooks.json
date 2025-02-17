@@ -198,5 +198,20 @@
         ],
         "progress": "Новый учебник",
         "route": "/course/4_1_"
+    },
+    {
+        "subject": "1181_4__3_",
+        "image": "/static/app/education/1181_4__3__2__2______2015_112/page_1.png",
+        "pdf": "/uploads/1181_4__3__2__2______2015_112.pdf",
+        "book_png": "/static/app/education/1181_4__3__2__2______2015_112/",
+        "rating": [
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "progress": "Новый учебник",
+        "route": "/course/1181_4__3_"
     }
 ]

@@ -4,6 +4,7 @@ from werkzeug.utils import secure_filename
 from pdf2image import convert_from_path
 import json
 import pymupdf
+import re
 
 app = Flask(__name__)
 
@@ -63,11 +64,15 @@ def index():
 def course_list():
     return render_template('course-list.html')
 
+def natural_key(string_):
+    """Возвращает список чисел и строк для естественной сортировки."""
+    return [int(text) if text.isdigit() else text.lower() for text in re.split('(\d+)', string_)]
+
+import re
 @app.route('/course/<subject_slug>')
 def course_page(subject_slug):
     textbooks = get_textbooks()
     selected_book = None
-    # Ищем учебник по slug (из поля route)
     for book in textbooks:
         route = book.get("route", "")
         if route.startswith("/course/"):
@@ -75,34 +80,34 @@ def course_page(subject_slug):
             if book_slug == subject_slug:
                 selected_book = book
                 break
-
     if not selected_book:
         flash("Учебник не найден")
         return redirect(url_for("index"))
 
-    # Получаем папку с PNG файлами из JSON (ключ "book_png")
+    # Получаем папку с PNG файлами
     book_png_folder = selected_book.get("book_png", "")
-    image = selected_book.get("image", "")
     images = []
     folder_name = ""
     if book_png_folder:
-        # Предполагается, что в JSON хранится абсолютный путь относительно static,
-        # например: "/static/app/education/Gramatica_en_uso_U_1_22__39_43_compressed_1/"
         folder_name = os.path.basename(os.path.normpath(book_png_folder))
-        # Формируем абсолютный путь к папке на диске:
         abs_folder_path = os.path.join(app.root_path, book_png_folder.lstrip("/"))
         try:
-            # Получаем список файлов с расширением .png и сортируем их
-            images = sorted([f for f in os.listdir(abs_folder_path) if f.lower().endswith('.png')])
-            # Для удобства в шаблоне передадим список с индексами и именами файлов
-            # Путь к файлам будет формироваться через url_for('static', filename=...)
+            images = [f for f in os.listdir(abs_folder_path) if f.lower().endswith('.png')]
+            # Сортировка изображений естественным способом
+            images = sorted(images, key=natural_key)
+            assert False, images
         except Exception as e:
             flash("Ошибка при чтении папки с изображениями: " + str(e))
     else:
         flash("Учебник не содержит извлечённых изображений.")
-    
-    # Передаем в шаблон: список изображений, имя папки (если нужно) и subject_slug
-    return render_template('math-page.html', selected_book=selected_book, images=images, folder_name=folder_name, subject_slug=subject_slug, image_preview=image)
+
+    # Передаем отсортированный список изображений в шаблон
+    return render_template('math-page.html',
+                           images=images,
+                           folder_name=folder_name,
+                           subject_slug=subject_slug,
+                           selected_book=selected_book,
+                           image_preview=selected_book.get("image", ""))
 
 @app.route('/math_page')
 def math_page():
