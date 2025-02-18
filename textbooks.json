@@ -64,6 +64,23 @@
             0
         ],
         "progress": "Новый учебник",
-        "route": "/course/4_1_"
+        "route": "/course/4_1_",
+        "type": "textbook"
+    },
+    {
+        "subject": "4_1_1111",
+        "image": "/static/app/education/4_1_/page_1.png",
+        "pdf": "/uploads/4_1_.pdf",
+        "book_png": "/static/app/education/4_1_/",
+        "rating": [
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "progress": "Новый учебник",
+        "route": "/course/4_1_",
+        "type": "economy"
     }
 ]

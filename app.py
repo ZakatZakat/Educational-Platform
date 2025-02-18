@@ -107,7 +107,8 @@ def course_page(subject_slug):
                            folder_name=folder_name,
                            subject_slug=subject_slug,
                            selected_book=selected_book,
-                           image_preview=selected_book.get("image", ""))
+                           image_preview=selected_book.get("image", ""),
+                           type=selected_book.get("type", ""))
 
 @app.route('/math_page')
 def math_page():

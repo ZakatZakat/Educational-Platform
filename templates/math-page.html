@@ -281,24 +281,35 @@ style="background-color: #F8F9FA; border-radius: 8px; width: 100%; max-width: 40
                     
                     let currentPage = 1;
                     const totalPages = images.length;
-                    
-                    // Объект с ожидаемыми ответами для каждой страницы (пример)
-                    const expectedAnswers = {
-                      1: ["answer1", "answer1b"],
-                      2: ["answer2"],
-                      3: ["answer3"],
-                      4: ["правильный ответ 1", "правильный ответ 2", "правильный ответ 3", "правильный ответ 4"],
-                      5: ["answer5", "answer5b", "answer5c"]
+                    const docType = "{{ type }}";
+            
+                    const expectedAnswers = docType === "textbook" ? {
+                        1: ["answer1", "answer1b"],
+                        2: ["answer2"],
+                        3: ["answer3"],
+                        4: ["правильный ответ 1", "правильный ответ 2"],
+                        5: ["answer5", "answer5b"]
+                    } : {
+                        1: ["econ1", "econ1b"],
+                        2: ["econ2"],
+                        3: ["econ3"],
+                        4: ["economic correct 1", "economic correct 2"],
+                        5: ["econ5", "econ5b"]
                     };
+
+                    const annotations = docType === "textbook" ? [
+    { page: 1, label: "задача", bbox_x: 120, bbox_y: 362, bbox_width: 81, bbox_height: 65, image_name: "2.png", image_width: 637, image_height: 857 },
+    { page: 1, label: "задача", bbox_x: 120, bbox_y: 430, bbox_width: 81, bbox_height: 65, image_name: "2.png", image_width: 637, image_height: 857 },
+    { page: 1, label: "задача", bbox_x: 120, bbox_y: 550, bbox_width: 81, bbox_height: 65, image_name: "2.png", image_width: 637, image_height: 857 },
+    { page: 1, label: "задача", bbox_x: 120, bbox_y: 735, bbox_width: 81, bbox_height: 65, image_name: "2.png", image_width: 637, image_height: 857 }
+] : [
+    { page: 4, label: "задача", bbox_x: 120, bbox_y: 362, bbox_width: 81, bbox_height: 65, image_name: "2.png", image_width: 637, image_height: 857 },
+    { page: 4, label: "задача", bbox_x: 120, bbox_y: 430, bbox_width: 81, bbox_height: 65, image_name: "2.png", image_width: 637, image_height: 857 },
+    { page: 4, label: "задача", bbox_x: 120, bbox_y: 550, bbox_width: 81, bbox_height: 65, image_name: "2.png", image_width: 637, image_height: 857 },
+    { page: 4, label: "задача", bbox_x: 120, bbox_y: 735, bbox_width: 81, bbox_height: 65, image_name: "2.png", image_width: 637, image_height: 857 }
+];
                     
-                    // Массив с аннотациями (данные взяты из вашей разметки)
-                    const annotations = [
-                      { page: 4, label: "задача", bbox_x: 120, bbox_y: 362, bbox_width: 81, bbox_height: 65, image_name: "2.png", image_width: 637, image_height: 857 },
-                      { page: 4, label: "задача", bbox_x: 120, bbox_y: 430, bbox_width: 81, bbox_height: 65, image_name: "2.png", image_width: 637, image_height: 857 },
-                      { page: 4, label: "задача", bbox_x: 120, bbox_y: 550, bbox_width: 81, bbox_height: 65, image_name: "2.png", image_width: 637, image_height: 857 },
-                      { page: 4, label: "задача", bbox_x: 120, bbox_y: 735, bbox_width: 81, bbox_height: 65, image_name: "2.png", image_width: 637, image_height: 857 }
-                    ];
-                    
+                    // Функция создания области ввода               
                     // При создании каждой области ввода – добавляем обработчик фокуса для очистки placeholder
                     function createOverlay(annotation, scale, pageNum, index) {
                       const overlay = document.createElement('div');
