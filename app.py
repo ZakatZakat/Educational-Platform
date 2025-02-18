@@ -160,6 +160,7 @@ def add_course_page():
             flash('Файл не найден')
             return redirect(request.url)
         file = request.files['file']
+        type_version = request.form.get('type')
         if file.filename == '':
             flash('Файл не выбран')
             return redirect(request.url)
@@ -227,8 +228,10 @@ def add_course_page():
                 "book_png": book_png,    # URL к папке с PNG-изображениями
                 "rating": [0, 0, 0, 0, 0],
                 "progress": "Новый учебник",
-                "route": "/course/" + subject_slug
+                "route": "/course/" + subject_slug,
+                "type": type_version
             }
+            
             add_textbook_entry(new_entry)
             return redirect(url_for('add_course_page'))
         else:

@@ -82,5 +82,37 @@
         "progress": "Новый учебник",
         "route": "/course/4_1_",
         "type": "economy"
+    },
+    {
+        "subject": "Credit_Car",
+        "image": "/static/app/education/Credit_Cards_Working/page_1.png",
+        "pdf": "/uploads/Credit_Cards_Working.pdf",
+        "book_png": "/static/app/education/Credit_Cards_Working/",
+        "rating": [
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "progress": "Новый учебник",
+        "route": "/course/credit_car",
+        "type": "economy"
+    },
+    {
+        "subject": "Credit_Car",
+        "image": "/static/app/education/Credit_Cards_Working/page_1.png",
+        "pdf": "/uploads/Credit_Cards_Working.pdf",
+        "book_png": "/static/app/education/Credit_Cards_Working/",
+        "rating": [
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "progress": "Новый учебник",
+        "route": "/course/credit_car",
+        "type": "economy"
     }
 ]

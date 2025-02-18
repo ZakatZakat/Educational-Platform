@@ -283,57 +283,62 @@ style="background-color: #F8F9FA; border-radius: 8px; width: 100%; max-width: 40
                     const totalPages = images.length;
                     const docType = "{{ type }}";
             
-                    const expectedAnswers = docType === "textbook" ? {
-                        1: ["answer1", "answer1b"],
-                        2: ["answer2"],
-                        3: ["answer3"],
-                        4: ["правильный ответ 1", "правильный ответ 2"],
-                        5: ["answer5", "answer5b"]
-                    } : {
-                        1: ["econ1", "econ1b"],
-                        2: ["econ2"],
-                        3: ["econ3"],
-                        4: ["economic correct 1", "economic correct 2"],
-                        5: ["econ5", "econ5b"]
-                    };
+                    window.expectedAnswers = (docType === "textbook") ? {
+    1: ["answer1", "answer1b"],
+    2: ["answer2"],
+    3: ["answer3"],
+    4: ["правильный ответ 1", "правильный ответ 2"],
+    5: ["answer5", "answer5b"]
+} : {
+    10: ["1", "20", "активации"],
+    11: ["15", "Зоне покрытия"],
+    12: ["1000", "1000", "1500", "1000", "1000"],
+};
 
                     const annotations = docType === "textbook" ? [
-    { page: 1, label: "задача", bbox_x: 120, bbox_y: 362, bbox_width: 81, bbox_height: 65, image_name: "2.png", image_width: 637, image_height: 857 },
-    { page: 1, label: "задача", bbox_x: 120, bbox_y: 430, bbox_width: 81, bbox_height: 65, image_name: "2.png", image_width: 637, image_height: 857 },
-    { page: 1, label: "задача", bbox_x: 120, bbox_y: 550, bbox_width: 81, bbox_height: 65, image_name: "2.png", image_width: 637, image_height: 857 },
-    { page: 1, label: "задача", bbox_x: 120, bbox_y: 735, bbox_width: 81, bbox_height: 65, image_name: "2.png", image_width: 637, image_height: 857 }
-] : [
     { page: 4, label: "задача", bbox_x: 120, bbox_y: 362, bbox_width: 81, bbox_height: 65, image_name: "2.png", image_width: 637, image_height: 857 },
     { page: 4, label: "задача", bbox_x: 120, bbox_y: 430, bbox_width: 81, bbox_height: 65, image_name: "2.png", image_width: 637, image_height: 857 },
     { page: 4, label: "задача", bbox_x: 120, bbox_y: 550, bbox_width: 81, bbox_height: 65, image_name: "2.png", image_width: 637, image_height: 857 },
     { page: 4, label: "задача", bbox_x: 120, bbox_y: 735, bbox_width: 81, bbox_height: 65, image_name: "2.png", image_width: 637, image_height: 857 }
-];
+] : [
+    { page: 10, label: "задача", bbox_x: 165, bbox_y: 45, bbox_width: 15, bbox_height: 20, image_name: "2.png", image_width: 637, image_height: 857 },
+    { page: 10, label: "задача", bbox_x: 233, bbox_y: 170, bbox_width: 20, bbox_height: 20, image_name: "2.png", image_width: 637, image_height: 857 },
+    { page: 10, label: "задача", bbox_x: 10, bbox_y: 228, bbox_width: 81, bbox_height: 20, image_name: "2.png", image_width: 637, image_height: 857 },
+    { page: 11, label: "задача", bbox_x: 300, bbox_y: 132, bbox_width: 81, bbox_height: 20, image_name: "2.png", image_width: 637, image_height: 857 },
+    { page: 11, label: "задача", bbox_x: 175, bbox_y: 235, bbox_width: 101, bbox_height: 20, image_name: "2.png", image_width: 637, image_height: 857 },
+    { page: 12, label: "задача", bbox_x: 455, bbox_y: 138, bbox_width: 101, bbox_height: 20, image_name: "2.png", image_width: 637, image_height: 857 },
+    { page: 12, label: "задача", bbox_x: 455, bbox_y: 168, bbox_width: 101, bbox_height: 20, image_name: "2.png", image_width: 637, image_height: 857 },
+    { page: 12, label: "задача", bbox_x: 455, bbox_y: 195, bbox_width: 101, bbox_height: 20, image_name: "2.png", image_width: 637, image_height: 857 },
+    { page: 12, label: "задача", bbox_x: 455, bbox_y: 220, bbox_width: 101, bbox_height: 20, image_name: "2.png", image_width: 637, image_height: 857 },
+    { page: 12, label: "задача", bbox_x: 455, bbox_y: 245, bbox_width: 101, bbox_height: 20, image_name: "2.png", image_width: 637, image_height: 857 },
+    { page: 12, label: "задача", bbox_x: 455, bbox_y: 275, bbox_width: 101, bbox_height: 20, image_name: "2.png", image_width: 637, image_height: 857 }
+
+     
+  ];
                     
                     // Функция создания области ввода               
                     // При создании каждой области ввода – добавляем обработчик фокуса для очистки placeholder
                     function createOverlay(annotation, scale, pageNum, index) {
-                      const overlay = document.createElement('div');
-                      overlay.className = 'annotationOverlay';
-                      overlay.contentEditable = true;
-                      overlay.style.position = 'absolute';
-                      overlay.style.left = (annotation.bbox_x * scale) + 'px';
-                      overlay.style.top = (annotation.bbox_y * scale) + 'px';
-                      overlay.style.width = (annotation.bbox_width * scale) + 'px';
-                      overlay.style.height = (annotation.bbox_height * scale) + 'px';
-                      overlay.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
-                      overlay.style.border = '1px dashed #333';
-                      overlay.style.borderRadius = '4px';
-                      overlay.style.padding = '2px';
-                      overlay.style.zIndex = 20;
-                      overlay.innerText = annotation.label;
-                      overlay.addEventListener("focus", function() {
-                        if (overlay.innerText.trim() === annotation.label) {
-                          overlay.innerText = "";
-                        }
-                      });
-                      overlay.id = `inputOverlay_${pageNum}_${index+1}`;
-                      return overlay;
-                    }
+  const overlay = document.createElement('div');
+  overlay.className = 'annotationOverlay';
+  overlay.contentEditable = true;
+  overlay.style.position = 'absolute';
+  overlay.style.left = (annotation.bbox_x * scale) + 'px';
+  overlay.style.top = (annotation.bbox_y * scale) + 'px';
+  overlay.style.width = (annotation.bbox_width * scale) + 'px';
+  overlay.style.height = (annotation.bbox_height * scale) + 'px';
+  // Устанавливаем сплошной белый фон
+  overlay.style.backgroundColor = '#ffffff';
+  overlay.style.border = '1px dashed #333';
+  overlay.style.borderRadius = '4px';
+  overlay.style.padding = '2px';
+  overlay.style.zIndex = 20;
+  // Убираем placeholder (не задаём начальный текст)
+  // overlay.innerText = annotation.label; // больше не используем
+
+  overlay.id = `inputOverlay_${pageNum}_${index+1}`;
+  return overlay;
+}
                     
                     // Инициализация селектора страниц
                     for (let i = 1; i <= totalPages; i++) {
@@ -510,62 +515,55 @@ style="background-color: #F8F9FA; border-radius: 8px; width: 100%; max-width: 40
               const showAnswersBtn = document.getElementById("showAnswers");
               const saveLessonBtn = document.getElementById("saveLesson");
           
-              // Пример: ожидаемые ответы для каждой страницы
-              const expectedAnswers = {
-                1: ["answer1", "answer1b"],
-                2: ["answer2"],
-                3: ["answer3"],
-                4: ["правильный ответ 1", "правильный ответ 2", "правильный ответ 3", "правильный ответ 4"],
-                5: ["answer5", "answer5b", "answer5c"]
-              };
+             
           
               checkBtnRight.addEventListener("click", function() {
-                console.log("Кнопка проверки нажата, currentPage =", window.currentPage);
-          
-                // Удаляем ранее созданные значки
-                const existingIcons = document.querySelectorAll('.checkIcon');
-                existingIcons.forEach(icon => icon.remove());
-          
-                // Находим все области ввода для текущей страницы
-                const currentAnnotations = document.querySelectorAll(`[id^="inputOverlay_${window.currentPage}_"]`);
-                console.log("Найденные области ввода:", currentAnnotations);
-          
-                let total = 0;
-                let correct = 0;
-                let incorrect = 0;
-          
-                currentAnnotations.forEach((overlay, index) => {
-                  total++;
-                  const userAnswer = overlay.innerText.trim().toLowerCase();
-                  const expected = (expectedAnswers[window.currentPage] && expectedAnswers[window.currentPage][index] ? expectedAnswers[window.currentPage][index] : "").toLowerCase();
-                  console.log(`Поле ${index+1}: введено "${userAnswer}", ожидается "${expected}"`);
-          
-                  const icon = document.createElement('span');
-                  icon.className = 'checkIcon';
-                  icon.style.position = 'absolute';
-                  icon.style.fontSize = '24px';
-                  // Определяем позицию: справа от области ввода
-                  const overlayLeft = parseFloat(overlay.style.left) || 0;
-                  const overlayWidth = overlay.offsetWidth;
-                  icon.style.left = (overlayLeft + overlayWidth + 5) + 'px';
-                  icon.style.top = overlay.style.top;
-          
-                  if (userAnswer === expected && userAnswer !== "") {
-                    icon.innerHTML = '<i class="fas fa-check" style="color:green;"></i>';
-                    correct++;
-                  } else {
-                    icon.innerHTML = '<i class="fas fa-times" style="color:red;"></i>';
-                    incorrect++;
-                  }
-                  document.getElementById('inputOverlaysContainer').appendChild(icon);
-                });
-          
-                // Обновляем "РЕЗУЛЬТАТЫ" на экране
-                document.getElementById('resolvedTasks').textContent = total;
-                document.getElementById('correctTasks').textContent = correct;
-                document.getElementById('incorrectTasks').textContent = incorrect;
-              });
-          
+  console.log("Кнопка проверки нажата, currentPage =", window.currentPage);
+
+  // Удаляем ранее созданные иконки, если они были добавлены внутрь overlay
+  const currentAnnotations = document.querySelectorAll(`[id^="inputOverlay_${window.currentPage}_"]`);
+  currentAnnotations.forEach(overlay => {
+    const existingIcon = overlay.querySelector('.checkIcon');
+    if (existingIcon) {
+      existingIcon.remove();
+    }
+  });
+
+  let total = 0;
+  let correct = 0;
+  let incorrect = 0;
+
+  currentAnnotations.forEach((overlay, index) => {
+    total++;
+    const userAnswer = overlay.innerText.trim().toLowerCase();
+    const expected = (window.expectedAnswers[window.currentPage] && window.expectedAnswers[window.currentPage][index] ? window.expectedAnswers[window.currentPage][index] : "").toLowerCase();
+    console.log(`Поле ${index+1}: введено "${userAnswer}", ожидается "${expected}"`);
+
+    const icon = document.createElement('span');
+    icon.className = 'checkIcon';
+    icon.style.position = 'absolute';
+icon.style.top = '-13px';
+icon.style.left = '50%';
+icon.style.transform = 'translate(-50%, -50%)';
+icon.style.fontSize = '24px';
+icon.style.pointerEvents = 'none';
+
+    if (userAnswer === expected && userAnswer !== "") {
+      icon.innerHTML = '<i class="fas fa-check" style="color:green;"></i>';
+      correct++;
+    } else {
+      icon.innerHTML = '<i class="fas fa-times" style="color:red;"></i>';
+      incorrect++;
+    }
+    // Добавляем иконку внутрь overlay, чтобы она располагалась поверх поля
+    overlay.appendChild(icon);
+  });
+
+  // Обновляем результаты на экране
+  document.getElementById('resolvedTasks').textContent = total;
+  document.getElementById('correctTasks').textContent = correct;
+  document.getElementById('incorrectTasks').textContent = incorrect;
+});
               // Примеры заглушек для остальных кнопок
               fixAnswersBtn.addEventListener("click", function() {
                 alert("Функция 'Исправить урок' в разработке");
